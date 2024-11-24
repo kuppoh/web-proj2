@@ -87,9 +87,10 @@ app.get('/logout', (req, res) => {
 });
 
 // Use the middleware for the /personal route
-app.get('/', isAuthenticated, (req, res) => {
+app.get('/', (req, res) => {
   res.render('personal', { isAuthenticated: req.isAuthenticated(), user: req.user });
 });
+
 // Start the server
 app.listen(3000, () => {
   console.log('Server is running on http://localhost:3000');
