@@ -71,17 +71,31 @@ app.get('/auth/google',
 );
 
 app.get('/auth/google/callback',
-  passport.authenticate('google', { failureRedirect: '/login' }),
-  (req, res) => {
-    // Log the login event and the user's email
-    if (req.user && req.user.emails && req.user.emails[0]) {
-      console.log(`User logged in: ${req.user.emails[0].value}`);
-    } else {
-      console.log('User logged in, but email not available');
-    }
-
-    // Successful authentication, redirect home.
-    res.redirect('/');
+  (req, res, next) => {
+    passport.authenticate('google', (err, user, info) => {
+      if (err) {
+        console.error('Authentication error:', err);
+        return next(err);
+      }
+      if (!user) {
+        console.log('Authentication failed:', info);
+        return res.redirect('/login');
+      }
+      req.logIn(user, (err) => {
+        if (err) {
+          console.error('Login error:', err);
+          return next(err);
+        }
+        // Log the login event and the user's email
+        if (req.user && req.user.emails && req.user.emails[0]) {
+          console.log(`User logged in: ${req.user.emails[0].value}`);
+        } else {
+          console.log('User logged in, but email not available');
+        }
+        // Successful authentication, redirect home.
+        return res.redirect('/');
+      });
+    })(req, res, next);
   }
 );
 
