@@ -2,6 +2,7 @@ const express = require('express');
 const path = require('path');
 const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
+const RedisStore = require('connect-redis')(session);
 const session = require('express-session');
 
 const app = express();
@@ -13,12 +14,26 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
+
+// Create a Redis client
+const redisClient = redis.createClient({
+  host: 'localhost', // or your Redis server's host
+  port: 6379,        // default Redis port
+  // password: 'your-redis-password' // if authentication is required
+});
+
 // Configure session middleware
+// Set up session middleware
 app.use(session({
-  secret: 'your_secret_key',
-  resave: false,
-  saveUninitialized: false,
-  cookie: { secure: true }
+  store: new RedisStore({ client: redisClient }), // Use Redis for session storage
+  secret: 'your-session-secret',                   // Use a secret to sign the session ID cookie
+  resave: false,                                  // Don't resave unchanged sessions
+  saveUninitialized: false,                       // Don't save empty sessions
+  cookie: {
+    secure: true,                                // Set to true if using HTTPS
+    httpOnly: true,                               // Helps prevent XSS attacks
+    maxAge: 3600000                               // Session expiration time (1 hour)
+  }
 }));
 
 // Initialize Passport and restore authentication state, if any, from the session
