@@ -73,8 +73,16 @@ passport.use(new GoogleStrategy({
   console.log('Access Token:', accessToken);
   console.log('Refresh Token:', refreshToken);
   console.log('Profile:', profile);
+
+  const user = {
+    id: profile.id,
+    displayName: profile.displayName,
+    emails: profile.emails
+  };
+  
   return done(null, profile);
 }));
+
 
 
 // Serialize user into the sessions
@@ -154,10 +162,10 @@ app.get('/login', checkNotAuthenticated, (req, res) => {
 
 // Use the middleware for the /personal route
 app.get('/', (req, res) => {
-  res.render('personal', { isAuthenticated: req.isAuthenticated(), user: req.session.user || null});
-
-
-  
+  res.render('personal', { 
+    isAuthenticated: req.isAuthenticated(), 
+    user: req.user ? { displayName: req.user.displayName, emails: req.user.emails } : null 
+  });
 });
 // Start the server
 app.listen(3000, () => {
