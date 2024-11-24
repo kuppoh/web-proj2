@@ -43,7 +43,7 @@ app.use(session({
   resave: false,                                  // Don't resave unchanged sessions
   saveUninitialized: false,                       // Don't save empty sessions
   cookie: {
-    secure: true,                                // Set to true if using HTTPS
+    secure: false,                                // Set to true if using HTTPS
     httpOnly: true,                               // Helps prevent XSS attacks
     maxAge: 24 * 60 * 60 * 1000                            // Session expiration time (1 hour)
   }
