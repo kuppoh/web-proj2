@@ -117,7 +117,7 @@ app.get('/logout', checkAuthenticated, (req, res) => {
 
   // Clear the JWT cookie
   res.clearCookie('jwt');
-  res.redirect('/login');
+  res.redirect('/');
 });
 
 // Define login route
