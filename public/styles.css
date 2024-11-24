@@ -190,6 +190,19 @@ body>div {
   height: 400px;
 }
 
+.projects-container {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px; /* Adds space between the divs */
+}
+
+.projects-container > div {
+  flex: 1;
+  padding: 10px;
+  margin: 10px;
+
+}
+
 #github-contributions {
   background-color: #161a1d;
   color: white;
