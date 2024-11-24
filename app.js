@@ -58,9 +58,12 @@ passport.use(new GoogleStrategy({
   clientID: '624534888737-450ntk4o8gvsdgc9emnuv3tv6pk6jocu.apps.googleusercontent.com',
   clientSecret: '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',
   callbackURL: 'https://portfolio.rat-monkee.online/auth/google/callback'
-}, (accessToken, refreshToken, profile, done) => {
-  // In a real application, you would save the user info to your database here
-  return done(null, profile);
+}, 
+function(accessToken, refreshToken, profile, done) {
+  // In a real application, you would verify the user profile and call done
+  User.findOrCreate({ googleId: profile.id }, function (err, user) {
+    return done(err, user);
+  });
 }));
 
 // Serialize user into the sessions
