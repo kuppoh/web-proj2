@@ -44,6 +44,13 @@ passport.deserializeUser((obj, done) => {
   done(null, obj);
 });
 
+function isAuthenticated(req, res, next) {
+  if (req.isAuthenticated()) {
+    return next();
+  }
+  res.redirect('/login');
+}
+
 // Define routes
 app.get('/', (req, res) => {
   res.render('personal'); // Render the 'personal.ejs' file
@@ -71,6 +78,11 @@ app.get('/logout', (req, res) => {
     if (err) { return next(err); }
     res.redirect('/');
   });
+});
+
+// Use the middleware for the /personal route
+app.get('/personal', isAuthenticated, (req, res) => {
+  res.render('personal', { isAuthenticated: req.isAuthenticated() });
 });
 
 // Start the server
