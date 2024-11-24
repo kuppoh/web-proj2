@@ -44,13 +44,12 @@ passport.deserializeUser((obj, done) => {
   done(null, obj);
 });
 
+// Middleware to check if the user is authenticated
 function isAuthenticated(req, res, next) {
   if (req.isAuthenticated()) {
     return next();
   }
   res.redirect('/login');
-
-  
 }
 
 // Middleware to check if the user is not authenticated
@@ -62,14 +61,10 @@ function checkNotAuthenticated(req, res, next) {
 }
 
 // Define routes
-// app.get('/', (req, res) => {
-//   res.render('personal'); // Render the 'personal.ejs' file
-// });
-
-// Define routes
 app.get('/login', checkNotAuthenticated, (req, res) => {
   res.render('login'); // Serve the 'login.html' file
 });
+
 // Define authentication routes
 app.get('/auth/google',
   passport.authenticate('google', { scope: ['profile', 'email'] })
@@ -89,7 +84,8 @@ app.get('/auth/google/callback',
     res.redirect('/');
   }
 );
-app.get('/logout', (req, res) => {
+
+app.get('/logout', isAuthenticated, (req, res) => {
   if (req.user && req.user.emails && req.user.emails[0]) {
     console.log(`User logged out: ${req.user.emails[0].value}`);
   } else {
@@ -98,15 +94,14 @@ app.get('/logout', (req, res) => {
 
   req.logout((err) => {
     if (err) { return next(err); }
-    res.redirect('/');
+    res.redirect('/login');
   });
 });
 
 // Use the middleware for the /personal route
-app.get('/', (req, res) => {
+app.get('/', isAuthenticated, (req, res) => {
   res.render('personal', { isAuthenticated: req.isAuthenticated(), user: req.user });
 });
-
 // Start the server
 app.listen(3000, () => {
   console.log('Server is running on http://localhost:3000');
