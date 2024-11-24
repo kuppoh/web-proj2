@@ -49,6 +49,16 @@ function isAuthenticated(req, res, next) {
     return next();
   }
   res.redirect('/login');
+
+  
+}
+
+// Middleware to check if the user is not authenticated
+function checkNotAuthenticated(req, res, next) {
+  if (req.isAuthenticated()) {
+    return res.redirect('/'); // Redirect to home page if authenticated
+  }
+  next();
 }
 
 // Define routes
@@ -56,10 +66,10 @@ function isAuthenticated(req, res, next) {
 //   res.render('personal'); // Render the 'personal.ejs' file
 // });
 
-app.get('/login', (req, res) => {
+// Define routes
+app.get('/login', checkNotAuthenticated, (req, res) => {
   res.render('login'); // Serve the 'login.html' file
 });
-
 // Define authentication routes
 app.get('/auth/google',
   passport.authenticate('google', { scope: ['profile', 'email'] })
