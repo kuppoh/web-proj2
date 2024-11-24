@@ -104,9 +104,9 @@ function checkNotAuthenticated(req, res, next) {
 }
 
 // Define routes
-app.get('/login', checkNotAuthenticated, (req, res) => {
-  res.render('login'); // Serve the 'login.html' file
-});
+// app.get('/login', checkNotAuthenticated, (req, res) => {
+//   res.render('login'); // Serve the 'login.html' file
+// });
 
 // Define authentication routes
 app.get('/auth/google',
@@ -143,6 +143,12 @@ app.get('/logout', checkAuthenticated, (req, res) => {
     res.redirect('/login');
   });
 });
+
+// Define login route
+app.get('/login', (req, res) => {
+  res.render('login', { isAuthenticated: req.isAuthenticated() });
+});
+
 
 // Use the middleware for the /personal route
 app.get('/', checkAuthenticated, (req, res) => {
