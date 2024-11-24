@@ -8,6 +8,7 @@ const cookieParser = require('cookie-parser');
 const cookieEncryption = require('cookie-encryption');
 const RedisStore = require('connect-redis').default;
 const redis = require('redis');
+const jwt = require('jsonwebtoken');
 
 const app = express();
 
@@ -19,34 +20,6 @@ app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
 app.use(cookieParser());
-
-// Custom session store implementation
-class CustomStore extends session.Store {
-  constructor() {
-    super();
-    this.sessions = {};
-  }
-
-  get(sid, callback) {
-    const sessionData = this.sessions[sid];
-    if (sessionData) {
-      callback(null, JSON.parse(sessionData));
-    } else {
-      callback(null, null);
-    }
-  }
-
-  set(sid, session, callback) {
-    this.sessions[sid] = JSON.stringify(session);
-    callback(null);
-  }
-
-  destroy(sid, callback) {
-    delete this.sessions[sid];
-    callback(null);
-  }
-}
-
 
 // Configure session middleware with custom store
 const secretKey = 'your-secret-key'; // Replace with a strong secret key
@@ -130,18 +103,29 @@ passport.deserializeUser((obj, done) => {
   done(null, obj);
 });
 
+
 // Middleware to check if the user is authenticated
 function checkAuthenticated(req, res, next) {
-  if (req.isAuthenticated()) {
-    return next();
+  const token = req.cookies.jwt;
+  if (token) {
+    jwt.verify(token, secretKey, (err, decoded) => {
+      if (err) {
+        return res.redirect('/login');
+      }
+      req.user = decoded;
+      next();
+    });
+  } else {
+    res.redirect('/login');
   }
-  res.redirect('/login');
 }
+
 
 // Middleware to check if the user is not authenticated
 function checkNotAuthenticated(req, res, next) {
-  if (req.isAuthenticated()) {
-    return res.redirect('/'); // Redirect to home page if authenticated
+  const token = req.cookies.jwt;
+  if (token) {
+    return res.redirect('/');
   }
   next();
 }
@@ -171,8 +155,13 @@ app.get('/auth/google/callback',
       } else {
         console.log('User logged in, but email not available');
       }
-      // Successful authentication, redirect home.
-      req.session.user = req.user;
+      // Create JWT token
+      const user = {
+        displayName: req.user.displayName,
+        emails: req.user.emails
+      };
+      const token = jwt.sign(user, secretKey, { expiresIn: '1d' });
+      res.cookie('jwt', token, { httpOnly: true, secure: false, maxAge: 24 * 60 * 60 * 1000 });
       res.redirect('/?loggedIn=true');
     } else {
       console.log('User not authenticated');
