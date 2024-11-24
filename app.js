@@ -5,6 +5,7 @@ const GoogleStrategy = require('passport-google-oauth20').Strategy;
 
 const session = require('express-session');
 const cookieParser = require('cookie-parser');
+const cookieEncryption = require('cookie-encryption');
 const RedisStore = require('connect-redis').default;
 const redis = require('redis');
 
@@ -19,19 +20,37 @@ app.set('views', path.join(__dirname, 'views'));
 
 app.use(cookieParser());
 
-
+const secretKey = 'your-secret-key'; // Replace with a strong secret key
+const encrypt = cookieEncryption(secretKey);
 
 // Added code for passport
 app.use(session({
-  secret: 'secret-deez-nutz', // Replace with a strong secret key
+  secret: secretKey,
   resave: false,
   saveUninitialized: false,
   cookie: {
     secure: false, // Set to true if using HTTPS
     maxAge: 24 * 60 * 60 * 1000 // 1 day
+  },
+  store: {
+    get: (sid, callback) => {
+      const sessionData = req.cookies[sid];
+      if (sessionData) {
+        callback(null, encrypt.decrypt(sessionData));
+      } else {
+        callback(null, null);
+      }
+    },
+    set: (sid, session, callback) => {
+      res.cookie(sid, encrypt.encrypt(session), { maxAge: 24 * 60 * 60 * 1000 });
+      callback(null);
+    },
+    destroy: (sid, callback) => {
+      res.clearCookie(sid);
+      callback(null);
+    }
   }
 }));
-
 
 // Create a Redis client
 // const redisClient = redis.createClient({
