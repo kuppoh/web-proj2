@@ -4,6 +4,7 @@ const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 
 const session = require('express-session');
+const cookieParser = require('cookie-parser');
 const RedisStore = require('connect-redis').default;
 const redis = require('redis');
 
@@ -16,15 +17,20 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
+app.use(cookieParser());
+
+
 
 // Added code for passport
-app.use(
-  session({
-  secret: "secret",
+app.use(session({
+  secret: 'secret-deez-nutz', // Replace with a strong secret key
   resave: false,
   saveUninitialized: false,
-  })
-);
+  cookie: {
+    secure: false, // Set to true if using HTTPS
+    maxAge: 24 * 60 * 60 * 1000 // 1 day
+  }
+}));
 
 
 // Create a Redis client
@@ -145,6 +151,7 @@ app.get('/auth/google/callback',
     }
   }
 );
+
 app.get('/logout', checkAuthenticated, (req, res) => {
   if (req.user && req.user.emails && req.user.emails[0]) {
     console.log(`User logged out: ${req.user.emails[0].value}`);
