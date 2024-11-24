@@ -68,12 +68,9 @@ passport.use(new GoogleStrategy({
   clientID: '624534888737-450ntk4o8gvsdgc9emnuv3tv6pk6jocu.apps.googleusercontent.com',
   clientSecret: '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',
   callbackURL: 'https://portfolio.rat-monkee.online/auth/google/callback'
-}, 
-function(accessToken, refreshToken, profile, done) {
-  // In a real application, you would verify the user profile and call done
-  User.findOrCreate({ googleId: profile.id }, function (err, user) {
-    return done(err, user);
-  });
+}, (accessToken, refreshToken, profile, done) => {
+  // Directly pass the profile information to the done callback
+  return done(null, profile);
 }));
 
 // Serialize user into the sessions
@@ -117,17 +114,32 @@ app.get('/auth/google/callback',
     console.log('Received callback from Google');
     next();
   },
-  passport.authenticate('google', { failureRedirect: '/login' }),
-  (req, res) => {
-    console.log('Google authentication successful');
-    // Log the login event and the user's email
-    if (req.user && req.user.emails && req.user.emails[0]) {
-      console.log(`User logged in: ${req.user.emails[0].value}`);
-    } else {
-      console.log('User logged in, but email not available');
-    }
-    // Successful authentication, redirect home.
-    res.redirect('/');
+  (req, res, next) => {
+    passport.authenticate('google', (err, user, info) => {
+      if (err) {
+        console.error('Authentication error:', err);
+        return next(err);
+      }
+      if (!user) {
+        console.log('Authentication failed:', info);
+        return res.redirect('/login');
+      }
+      req.logIn(user, (err) => {
+        if (err) {
+          console.error('Login error:', err);
+          return next(err);
+        }
+        console.log('Google authentication successful');
+        // Log the login event and the user's email
+        if (req.user && req.user.emails && req.user.emails[0]) {
+          console.log(`User logged in: ${req.user.emails[0].value}`);
+        } else {
+          console.log('User logged in, but email not available');
+        }
+        // Successful authentication, redirect home.
+        res.redirect('/');
+      });
+    })(req, res, next);
   }
 );
 app.get('/logout', checkAuthenticated, (req, res) => {
