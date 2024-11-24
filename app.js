@@ -20,6 +20,34 @@ app.set('views', path.join(__dirname, 'views'));
 
 app.use(cookieParser());
 
+// Custom session store implementation
+class CustomStore extends session.Store {
+  constructor() {
+    super();
+    this.sessions = {};
+  }
+
+  get(sid, callback) {
+    const sessionData = this.sessions[sid];
+    if (sessionData) {
+      callback(null, JSON.parse(sessionData));
+    } else {
+      callback(null, null);
+    }
+  }
+
+  set(sid, session, callback) {
+    this.sessions[sid] = JSON.stringify(session);
+    callback(null);
+  }
+
+  destroy(sid, callback) {
+    delete this.sessions[sid];
+    callback(null);
+  }
+}
+
+
 // Configure session middleware with custom store
 const secretKey = 'your-secret-key'; // Replace with a strong secret key
 
