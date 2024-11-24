@@ -128,6 +128,7 @@ app.get('/auth/google/callback',
       console.log('User logged in, but email not available');
     }
     // Successful authentication, redirect home.
+    req.session.user = req.user;
     res.redirect('/');
   }
 );
@@ -153,7 +154,10 @@ app.get('/login', checkNotAuthenticated, (req, res) => {
 
 // Use the middleware for the /personal route
 app.get('/', (req, res) => {
-  res.render('personal', { isAuthenticated: req.isAuthenticated(), user: req.user });
+  res.render('personal', { isAuthenticated: req.isAuthenticated(), user: req.session.user || null });
+
+
+  
 });
 // Start the server
 app.listen(3000, () => {
