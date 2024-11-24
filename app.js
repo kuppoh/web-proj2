@@ -87,7 +87,7 @@ app.get('/logout', (req, res) => {
 });
 
 // Use the middleware for the /personal route
-app.get('/personal', isAuthenticated, (req, res) => {
+app.get('/', isAuthenticated, (req, res) => {
   res.render('personal', { isAuthenticated: req.isAuthenticated(), user: req.user });
 });
 // Start the server
