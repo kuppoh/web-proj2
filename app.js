@@ -186,16 +186,15 @@ app.get('/logout', checkAuthenticated, (req, res) => {
 
 // Define login route
 app.get('/login', checkNotAuthenticated, (req, res) => {
-  res.render('login', { isAuthenticated: req.isAuthenticated() });
+  res.render('login', { isAuthenticated: false });
 });
 
-
 // Use the middleware for the /personal route
-app.get('/', (req, res) => {
-  console.log('isAuthenticated:', req.isAuthenticated());
+app.get('/', checkAuthenticated, (req, res) => {
+  console.log('isAuthenticated:', true);
   console.log('user:', req.user);
   res.render('personal', { 
-    isAuthenticated: req.isAuthenticated(), 
+    isAuthenticated: true, 
     user: req.user ? { displayName: req.user.displayName, emails: req.user.emails } : null 
   });
 });
