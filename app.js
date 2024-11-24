@@ -54,16 +54,17 @@ function checkAuthenticated(req, res, next) {
   if (token) {
     jwt.verify(token, secretKey, (err, decoded) => {
       if (err) {
-        return res.redirect('/login');
+        req.user = null;
+      } else {
+        req.user = decoded;
       }
-      req.user = decoded;
       next();
     });
   } else {
-    res.redirect('/login');
+    req.user = null;
+    next();
   }
 }
-
 // Middleware to check if the user is not authenticated
 function checkNotAuthenticated(req, res, next) {
   const token = req.cookies.jwt;
@@ -126,10 +127,11 @@ app.get('/login', checkNotAuthenticated, (req, res) => {
 
 // Use the middleware for the /personal route
 app.get('/', checkAuthenticated, (req, res) => {
-  console.log('isAuthenticated:', true);
+  const isAuthenticated = !!req.user;
+  console.log('isAuthenticated:', isAuthenticated);
   console.log('user:', req.user);
   res.render('personal', { 
-    isAuthenticated: true, 
+    isAuthenticated, 
     user: req.user ? { displayName: req.user.displayName, emails: req.user.emails } : null 
   });
 });

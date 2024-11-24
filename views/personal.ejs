@@ -38,7 +38,7 @@
     </ul>
   </nav>
 
-  <% if (isAuthenticated) { %>
+  <% if (user && isAuthenticated) { %>
     <h1>welcome back <%= user.displayName %>!</h1>
   <% } %>
 
