@@ -2,12 +2,7 @@ const express = require('express');
 const path = require('path');
 const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
-
-const session = require('express-session');
 const cookieParser = require('cookie-parser');
-const cookieEncryption = require('cookie-encryption');
-const RedisStore = require('connect-redis').default;
-const redis = require('redis');
 const jwt = require('jsonwebtoken');
 
 const app = express();
@@ -21,55 +16,7 @@ app.set('views', path.join(__dirname, 'views'));
 
 app.use(cookieParser());
 
-// Configure session middleware with custom store
 const secretKey = 'your-secret-key'; // Replace with a strong secret key
-
-// app.use(session({
-//   secret: secretKey,
-//   resave: false,
-//   saveUninitialized: false,
-//   store: new CustomStore(),
-//   cookie: {
-//     secure: false, // Set to true if using HTTPS
-//     maxAge: 24 * 60 * 60 * 1000 // 1 day
-//   }
-// }));
-
-// Create a Redis client
-// const redisClient = redis.createClient({
-//   host: '127.0.0.1', // or your Redis server's host
-//   port: 6379,        // default Redis port
-//   // password: 'your-redis-password' // if authentication is required
-// });
-
-// redisClient.on('error', (err) => {
-//   console.error('Redis client error:', err);
-// });
-
-// redisClient.on('connect', () => {
-//   console.log('Redis client connected');
-// });
-
-// redisClient.connect().catch(console.error);
-
-// Configure session middleware
-// Set up session middleware
-
-// app.use(session({
-//   store: new RedisStore({ client: redisClient }), // Use Redis for session storage
-//   secret: 'your-session-secret',                   // Use a secret to sign the session ID cookie
-//   resave: false,                                  // Don't resave unchanged sessions
-//   saveUninitialized: false,                       // Don't save empty sessions
-//   cookie: {
-//     secure: true,                                // Set to true if using HTTPS
-//     httpOnly: true,                               // Helps prevent XSS attacks
-//     maxAge: 24 * 60 * 60 * 1000                            // Session expiration time (1 hour)
-//   }
-// }));
-
-// Initialize Passport and restore authentication state, if any, from the session
-app.use(passport.initialize());
-app.use(passport.session());
 
 // Configure Passport to use Google OAuth strategy
 passport.use(new GoogleStrategy({
@@ -91,8 +38,6 @@ passport.use(new GoogleStrategy({
   return done(null, profile);
 }));
 
-
-
 // Serialize user into the sessions
 passport.serializeUser((user, done) => {
   done(null, user);
@@ -102,7 +47,6 @@ passport.serializeUser((user, done) => {
 passport.deserializeUser((obj, done) => {
   done(null, obj);
 });
-
 
 // Middleware to check if the user is authenticated
 function checkAuthenticated(req, res, next) {
@@ -120,7 +64,6 @@ function checkAuthenticated(req, res, next) {
   }
 }
 
-
 // Middleware to check if the user is not authenticated
 function checkNotAuthenticated(req, res, next) {
   const token = req.cookies.jwt;
@@ -129,11 +72,6 @@ function checkNotAuthenticated(req, res, next) {
   }
   next();
 }
-
-// Define routes
-// app.get('/login', checkNotAuthenticated, (req, res) => {
-//   res.render('login'); // Serve the 'login.html' file
-// });
 
 // Define authentication routes
 app.get('/auth/google',
@@ -145,10 +83,9 @@ app.get('/auth/google/callback',
     console.log('Received callback from Google');
     next();
   },
-  passport.authenticate('google', { failureRedirect: '/login', session: false}),
+  passport.authenticate('google', { failureRedirect: '/login', session: false }),
   (req, res) => {
     console.log('Google authentication successful');
-    // Log the login event and the user's email
     if (req.isAuthenticated()) {
       if (req.user && req.user.emails && req.user.emails[0]) {
         console.log(`User logged in: ${req.user.emails[0].value}`);
@@ -177,11 +114,10 @@ app.get('/logout', checkAuthenticated, (req, res) => {
     console.log('User logged out, but email not available');
   }
 
-// Clear the JWT cookie
+  // Clear the JWT cookie
   res.clearCookie('jwt');
   res.redirect('/login');
 });
-
 
 // Define login route
 app.get('/login', checkNotAuthenticated, (req, res) => {
@@ -197,6 +133,7 @@ app.get('/', checkAuthenticated, (req, res) => {
     user: req.user ? { displayName: req.user.displayName, emails: req.user.emails } : null 
   });
 });
+
 // Start the server
 app.listen(3000, () => {
   console.log('Server is running on http://localhost:3000');
