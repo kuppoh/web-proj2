@@ -68,11 +68,17 @@ app.get('/auth/google',
 app.get('/auth/google/callback',
   passport.authenticate('google', { failureRedirect: '/login' }),
   (req, res) => {
+    // Log the login event and the user's email
+    if (req.user && req.user.emails && req.user.emails[0]) {
+      console.log(`User logged in: ${req.user.emails[0].value}`);
+    } else {
+      console.log('User logged in, but email not available');
+    }
+
     // Successful authentication, redirect home.
     res.redirect('/');
   }
 );
-
 app.get('/logout', (req, res) => {
   req.logout((err) => {
     if (err) { return next(err); }
