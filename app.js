@@ -52,13 +52,13 @@ function isAuthenticated(req, res, next) {
 }
 
 // Define routes
-app.get('/', (req, res) => {
-  res.render('personal'); // Render the 'personal.ejs' file
-});
-
-// app.get('/login', (req, res) => {
-//   res.render('login'); // Serve the 'login.html' file
+// app.get('/', (req, res) => {
+//   res.render('personal'); // Render the 'personal.ejs' file
 // });
+
+app.get('/login', (req, res) => {
+  res.render('login'); // Serve the 'login.html' file
+});
 
 // Define authentication routes
 app.get('/auth/google',
