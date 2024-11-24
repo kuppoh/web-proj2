@@ -20,35 +20,17 @@ app.set('views', path.join(__dirname, 'views'));
 
 app.use(cookieParser());
 
+// Configure session middleware with custom store
 const secretKey = 'your-secret-key'; // Replace with a strong secret key
-const encrypt = cookieEncryption(secretKey);
 
-// Added code for passport
 app.use(session({
   secret: secretKey,
   resave: false,
   saveUninitialized: false,
+  store: new CustomStore(),
   cookie: {
     secure: false, // Set to true if using HTTPS
     maxAge: 24 * 60 * 60 * 1000 // 1 day
-  },
-  store: {
-    get: (sid, callback) => {
-      const sessionData = req.cookies[sid];
-      if (sessionData) {
-        callback(null, encrypt.decrypt(sessionData));
-      } else {
-        callback(null, null);
-      }
-    },
-    set: (sid, session, callback) => {
-      res.cookie(sid, encrypt.encrypt(session), { maxAge: 24 * 60 * 60 * 1000 });
-      callback(null);
-    },
-    destroy: (sid, callback) => {
-      res.clearCookie(sid);
-      callback(null);
-    }
   }
 }));
 
