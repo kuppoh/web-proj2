@@ -24,16 +24,16 @@ app.use(cookieParser());
 // Configure session middleware with custom store
 const secretKey = 'your-secret-key'; // Replace with a strong secret key
 
-app.use(session({
-  secret: secretKey,
-  resave: false,
-  saveUninitialized: false,
-  store: new CustomStore(),
-  cookie: {
-    secure: false, // Set to true if using HTTPS
-    maxAge: 24 * 60 * 60 * 1000 // 1 day
-  }
-}));
+// app.use(session({
+//   secret: secretKey,
+//   resave: false,
+//   saveUninitialized: false,
+//   store: new CustomStore(),
+//   cookie: {
+//     secure: false, // Set to true if using HTTPS
+//     maxAge: 24 * 60 * 60 * 1000 // 1 day
+//   }
+// }));
 
 // Create a Redis client
 // const redisClient = redis.createClient({
