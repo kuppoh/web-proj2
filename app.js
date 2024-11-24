@@ -17,37 +17,52 @@ app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
 
+// Added code for passport
+app.use(
+  session({
+  secret: "secret",
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+      httpOnly: true,
+      secure: false,
+      maxAge: 24 * 60 * 60 * 1000,
+  },
+  })
+);
+
 
 // Create a Redis client
-const redisClient = redis.createClient({
-  host: '127.0.0.1', // or your Redis server's host
-  port: 6379,        // default Redis port
-  // password: 'your-redis-password' // if authentication is required
-});
+// const redisClient = redis.createClient({
+//   host: '127.0.0.1', // or your Redis server's host
+//   port: 6379,        // default Redis port
+//   // password: 'your-redis-password' // if authentication is required
+// });
 
-redisClient.on('error', (err) => {
-  console.error('Redis client error:', err);
-});
+// redisClient.on('error', (err) => {
+//   console.error('Redis client error:', err);
+// });
 
-redisClient.on('connect', () => {
-  console.log('Redis client connected');
-});
+// redisClient.on('connect', () => {
+//   console.log('Redis client connected');
+// });
 
-redisClient.connect().catch(console.error);
+// redisClient.connect().catch(console.error);
 
 // Configure session middleware
 // Set up session middleware
-app.use(session({
-  store: new RedisStore({ client: redisClient }), // Use Redis for session storage
-  secret: 'your-session-secret',                   // Use a secret to sign the session ID cookie
-  resave: false,                                  // Don't resave unchanged sessions
-  saveUninitialized: false,                       // Don't save empty sessions
-  cookie: {
-    secure: false,                                // Set to true if using HTTPS
-    httpOnly: true,                               // Helps prevent XSS attacks
-    maxAge: 24 * 60 * 60 * 1000                            // Session expiration time (1 hour)
-  }
-}));
+
+// app.use(session({
+//   store: new RedisStore({ client: redisClient }), // Use Redis for session storage
+//   secret: 'your-session-secret',                   // Use a secret to sign the session ID cookie
+//   resave: false,                                  // Don't resave unchanged sessions
+//   saveUninitialized: false,                       // Don't save empty sessions
+//   cookie: {
+//     secure: true,                                // Set to true if using HTTPS
+//     httpOnly: true,                               // Helps prevent XSS attacks
+//     maxAge: 24 * 60 * 60 * 1000                            // Session expiration time (1 hour)
+//   }
+// }));
 
 // Initialize Passport and restore authentication state, if any, from the session
 app.use(passport.initialize());
