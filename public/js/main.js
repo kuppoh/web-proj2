@@ -1,28 +1,20 @@
 document.addEventListener('DOMContentLoaded', () => {
-  // Initially hide the edit buttons
-  document.querySelectorAll('.edit-btn').forEach(btn => {
-    btn.style.display = 'none';
-  });
-
-  // Show edit buttons and set up event listeners based on the authentication state
-  // We rely on the 'isAuthenticated' being passed from the server and set by the EJS view
-  if (isAuthenticated) {
-    onSignIn();
-  }
+  // Show edit buttons and set up event listeners immediately when the page loads
+  showEditButtons();
 });
 
-function onSignIn() {
+function showEditButtons() {
   console.log('User signed in.');
 
   // Show edit buttons and attach event listeners
   document.querySelectorAll('.edit-btn').forEach(btn => {
-    btn.style.display = 'block';
-    btn.addEventListener('click', toggleEdit);
+    btn.style.display = 'block'; // Make sure the button is visible
+    btn.addEventListener('click', toggleEdit); // Attach the click event listener
   });
 
-  // Toggle login/logout links
-  document.getElementById('login-link').style.display = 'none';
-  document.getElementById('logout-link').style.display = 'block';
+  // Set the login/logout links (assumed that the user is logged in by default in this version)
+  document.getElementById('login-link').style.display = 'none';  // Hide login link
+  document.getElementById('logout-link').style.display = 'block'; // Show logout link
 }
 
 function signOut() {
@@ -34,9 +26,9 @@ function signOut() {
     btn.removeEventListener('click', toggleEdit);
   });
 
-  // Toggle login/logout links
-  document.getElementById('login-link').style.display = 'block';
-  document.getElementById('logout-link').style.display = 'none';
+  // Toggle login/logout links (this assumes user is now signed out)
+  document.getElementById('login-link').style.display = 'block'; // Show login link
+  document.getElementById('logout-link').style.display = 'none'; // Hide logout link
 }
 
 function toggleEdit(event) {
@@ -46,16 +38,16 @@ function toggleEdit(event) {
   
   contentElements.forEach(content => {
     const isEditable = content.getAttribute('contenteditable') === 'true';
-    content.setAttribute('contenteditable', !isEditable);
+    content.setAttribute('contenteditable', !isEditable);  // Toggle contenteditable attribute
     if (!isEditable) {
       content.focus();
     }
   });
 
   if (button.textContent === 'Edit') {
-    button.textContent = 'Save';
+    button.textContent = 'Save';  // Change button text to "Save"
   } else {
-    button.textContent = 'Edit';
+    button.textContent = 'Edit';  // Change button text back to "Edit"
     // Save changes to the server (e.g., using AJAX)
     saveChangesToServer(contentElements);
   }
