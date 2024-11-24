@@ -17,12 +17,23 @@ app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
 
+
 // Create a Redis client
 const redisClient = redis.createClient({
   host: 'localhost', // or your Redis server's host
   port: 6379,        // default Redis port
   // password: 'your-redis-password' // if authentication is required
 });
+
+redisClient.on('error', (err) => {
+  console.error('Redis client error:', err);
+});
+
+redisClient.on('connect', () => {
+  console.log('Redis client connected');
+});
+
+redisClient.connect().catch(console.error);
 
 // Configure session middleware
 // Set up session middleware
