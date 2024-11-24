@@ -26,8 +26,8 @@ app.use(passport.session());
 
 // Configure Passport to use Google OAuth strategy
 passport.use(new GoogleStrategy({
-  clientID: '624534888737-450ntk4o8gvsdgc9emnuv3tv6pk6jocu.apps.googleusercontent.com',
-  clientSecret: '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',
+  clientID: GOOGLE_CLIENT_ID,
+  clientSecret: GOOGLE_CLIENT_SECRET,
   callbackURL: 'https://portfolio.rat-monkee.online/auth/google/callback'
 }, (accessToken, refreshToken, profile, done) => {
   // In a real application, you would save the user info to your database here
