@@ -80,6 +80,12 @@ app.get('/auth/google/callback',
   }
 );
 app.get('/logout', (req, res) => {
+  if (req.user && req.user.emails && req.user.emails[0]) {
+    console.log(`User logged out: ${req.user.emails[0].value}`);
+  } else {
+    console.log('User logged out, but email not available');
+  }
+
   req.logout((err) => {
     if (err) { return next(err); }
     res.redirect('/');

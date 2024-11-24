@@ -29,7 +29,8 @@ function signOut() {
 }
 
 function toggleEdit(event) {
-  const parentDiv = event.target.closest('div');
+  const button = event.target;
+  const parentDiv = button.closest('div');
   const contentElements = parentDiv.querySelectorAll('.editable-content');
   
   contentElements.forEach(content => {
@@ -40,9 +41,16 @@ function toggleEdit(event) {
     }
   });
 
-  // Add a new list item if the parent contains a list
+  if (button.textContent === 'Edit') {
+    button.textContent = 'Save';
+  } else {
+    button.textContent = 'Edit';
+    // Here you can add code to save the changes to the server
+  }
+
+  // Add a new list item if the parent contains a list and we are in edit mode
   const ul = parentDiv.querySelector('ul');
-  if (ul) {
+  if (ul && button.textContent === 'Save') {
     const newItem = document.createElement('li');
     newItem.className = 'editable-content';
     newItem.setAttribute('contenteditable', 'true');
