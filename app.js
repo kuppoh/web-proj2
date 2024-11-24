@@ -2,9 +2,10 @@ const express = require('express');
 const path = require('path');
 const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
+
+const session = require('express-session');
 const RedisStore = require('connect-redis')(session);
 const redis = require('redis');
-const session = require('express-session');
 
 const app = express();
 
