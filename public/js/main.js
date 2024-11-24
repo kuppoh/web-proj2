@@ -4,19 +4,18 @@ document.addEventListener('DOMContentLoaded', () => {
     btn.style.display = 'none';
   });
 
-  // Check if the user is already signed in (if applicable)
-  if (isUserSignedIn()) {
+  // Show edit buttons and set up event listeners based on the authentication state
+  // We rely on the 'isAuthenticated' being passed from the server and set by the EJS view
+  if (isAuthenticated) {
     onSignIn();
   }
 });
 
 function onSignIn() {
-  // Simulate Google Sign-In
   console.log('User signed in.');
 
   // Show edit buttons and attach event listeners
   document.querySelectorAll('.edit-btn').forEach(btn => {
-    console.log('Showing edit button:', btn); // Debug log
     btn.style.display = 'block';
     btn.addEventListener('click', toggleEdit);
   });
@@ -27,12 +26,10 @@ function onSignIn() {
 }
 
 function signOut() {
-  // Simulate Google Sign-Out
   console.log('User signed out.');
 
   // Hide edit buttons and remove event listeners
   document.querySelectorAll('.edit-btn').forEach(btn => {
-    console.log('Hiding edit button:', btn); // Debug log
     btn.style.display = 'none';
     btn.removeEventListener('click', toggleEdit);
   });
@@ -59,24 +56,40 @@ function toggleEdit(event) {
     button.textContent = 'Save';
   } else {
     button.textContent = 'Edit';
-    // Here, you can add code to save the changes to the server (e.g., using AJAX)
+    // Save changes to the server (e.g., using AJAX)
+    saveChangesToServer(contentElements);
   }
 
-  // Add a new list item if the parent contains a list and we are in "Save" mode
+  // Add a new list item if the parent contains a list and we're in "Save" mode
   const ul = parentDiv.querySelector('ul');
   if (ul && button.textContent === 'Save') {
     const newItem = document.createElement('li');
     newItem.className = 'editable-content';
     newItem.setAttribute('contenteditable', 'true');
-    newItem.textContent = 'New item';
+    newItem.textContent = 'New item';  // Placeholder text
     ul.appendChild(newItem);
     newItem.focus();
   }
 }
 
-// Helper function to check if the user is signed in
-function isUserSignedIn() {
-  // Implement your logic to check if the user is signed in
-  // For example, check a cookie or local storage
-  return false; // Change this to your actual logic
+// Save the edited content to the server (e.g., using AJAX)
+function saveChangesToServer(contentElements) {
+  contentElements.forEach(content => {
+    const updatedContent = content.innerHTML; // Get the updated content
+    console.log('Saving content:', updatedContent);
+
+    // Perform AJAX call to save the content to the server
+    fetch('/save-edited-content', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ content: updatedContent })
+    })
+    .then(response => response.json())
+    .then(data => {
+      console.log('Content saved:', data);
+    })
+    .catch(error => console.error('Error saving content:', error));
+  });
 }
