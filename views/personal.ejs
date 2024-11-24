@@ -135,6 +135,9 @@
       <button class="edit-btn">Edit</button>
     <% } %>
   </div>
+  <script>
+    var isAuthenticated = <%= JSON.stringify(isAuthenticated) %>;
+  </script>
 
   <script src="https://apis.google.com/js/platform.js" async defer></script>
   <script src="/js/main.js"></script>
