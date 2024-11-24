@@ -130,14 +130,19 @@ app.get('/auth/google/callback',
   (req, res) => {
     console.log('Google authentication successful');
     // Log the login event and the user's email
-    if (req.user && req.user.emails && req.user.emails[0]) {
-      console.log(`User logged in: ${req.user.emails[0].value}`);
+    if (req.isAuthenticated()) {
+      if (req.user && req.user.emails && req.user.emails[0]) {
+        console.log(`User logged in: ${req.user.emails[0].value}`);
+      } else {
+        console.log('User logged in, but email not available');
+      }
+      // Successful authentication, redirect home.
+      req.session.user = req.user;
+      res.redirect('/?loggedIn=true');
     } else {
-      console.log('User logged in, but email not available');
+      console.log('User not authenticated');
+      res.redirect('/login');
     }
-    // Successful authentication, redirect home.
-    req.session.user = req.user;
-    res.redirect('/');
   }
 );
 app.get('/logout', checkAuthenticated, (req, res) => {
@@ -162,6 +167,8 @@ app.get('/login', checkNotAuthenticated, (req, res) => {
 
 // Use the middleware for the /personal route
 app.get('/', (req, res) => {
+  console.log('isAuthenticated:', req.isAuthenticated());
+  console.log('user:', req.user);
   res.render('personal', { 
     isAuthenticated: req.isAuthenticated(), 
     user: req.user ? { displayName: req.user.displayName, emails: req.user.emails } : null 
