@@ -17,7 +17,8 @@ app.set('views', path.join(__dirname, 'views'));
 app.use(session({
   secret: 'your_secret_key',
   resave: false,
-  saveUninitialized: true
+  saveUninitialized: false,
+  cookie: { secure: true }
 }));
 
 // Initialize Passport and restore authentication state, if any, from the session
