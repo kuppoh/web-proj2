@@ -53,8 +53,23 @@ function toggleEdit(event) {
 
   if (button.textContent === 'Edit') {
     button.textContent = 'Save';
+    // Add delete buttons to list items
+    const ul = parentDiv.querySelector('ul');
+    if (ul) {
+      ul.querySelectorAll('li').forEach(li => {
+        if (!li.querySelector('.delete-btn')) {
+          const deleteBtn = document.createElement('button');
+          deleteBtn.className = 'delete-btn';
+          deleteBtn.textContent = 'Delete';
+          deleteBtn.addEventListener('click', () => li.remove());
+          li.appendChild(deleteBtn);
+        }
+      });
+    }
   } else {
     button.textContent = 'Edit';
+    // Remove delete buttons from list items
+    parentDiv.querySelectorAll('.delete-btn').forEach(btn => btn.remove());
     // Here, you can add code to save the changes to the server (e.g., using AJAX)
   }
 
