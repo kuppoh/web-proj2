@@ -113,8 +113,13 @@ app.get('/auth/google',
 );
 
 app.get('/auth/google/callback',
+  (req, res, next) => {
+    console.log('Received callback from Google');
+    next();
+  },
   passport.authenticate('google', { failureRedirect: '/login' }),
   (req, res) => {
+    console.log('Google authentication successful');
     // Log the login event and the user's email
     if (req.user && req.user.emails && req.user.emails[0]) {
       console.log(`User logged in: ${req.user.emails[0].value}`);
@@ -125,7 +130,6 @@ app.get('/auth/google/callback',
     res.redirect('/');
   }
 );
-
 app.get('/logout', checkAuthenticated, (req, res) => {
   if (req.user && req.user.emails && req.user.emails[0]) {
     console.log(`User logged out: ${req.user.emails[0].value}`);
