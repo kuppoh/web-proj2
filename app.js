@@ -144,14 +144,15 @@ app.get('/logout', checkAuthenticated, (req, res) => {
   });
 });
 
+
 // Define login route
-app.get('/login', (req, res) => {
+app.get('/login', checkNotAuthenticated, (req, res) => {
   res.render('login', { isAuthenticated: req.isAuthenticated() });
 });
 
 
 // Use the middleware for the /personal route
-app.get('/', checkAuthenticated, (req, res) => {
+app.get('/', (req, res) => {
   res.render('personal', { isAuthenticated: req.isAuthenticated(), user: req.user });
 });
 // Start the server
