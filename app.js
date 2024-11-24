@@ -45,7 +45,7 @@ passport.deserializeUser((obj, done) => {
 });
 
 // Middleware to check if the user is authenticated
-function isAuthenticated(req, res, next) {
+function checkAuthenticated(req, res, next) {
   if (req.isAuthenticated()) {
     return next();
   }
@@ -85,7 +85,7 @@ app.get('/auth/google/callback',
   }
 );
 
-app.get('/logout', isAuthenticated, (req, res) => {
+app.get('/logout', checkAuthenticated, (req, res) => {
   if (req.user && req.user.emails && req.user.emails[0]) {
     console.log(`User logged out: ${req.user.emails[0].value}`);
   } else {
@@ -99,7 +99,7 @@ app.get('/logout', isAuthenticated, (req, res) => {
 });
 
 // Use the middleware for the /personal route
-app.get('/', isAuthenticated, (req, res) => {
+app.get('/', checkAuthenticated, (req, res) => {
   res.render('personal', { isAuthenticated: req.isAuthenticated(), user: req.user });
 });
 // Start the server
