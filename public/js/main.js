@@ -1,8 +1,13 @@
 document.addEventListener('DOMContentLoaded', () => {
-  // Ensure that edit buttons are visible and event listeners are attached
+  // Initially hide the edit buttons
   document.querySelectorAll('.edit-btn').forEach(btn => {
-    btn.style.display = 'none'; // Initially hide the edit buttons
+    btn.style.display = 'none';
   });
+
+  // Check if the user is already signed in (if applicable)
+  if (isUserSignedIn()) {
+    onSignIn();
+  }
 });
 
 function onSignIn() {
@@ -11,8 +16,9 @@ function onSignIn() {
 
   // Show edit buttons and attach event listeners
   document.querySelectorAll('.edit-btn').forEach(btn => {
-    btn.style.display = 'block'; // Show edit buttons when signed in
-    btn.addEventListener('click', toggleEdit); // Attach the click event listener
+    console.log('Showing edit button:', btn); // Debug log
+    btn.style.display = 'block';
+    btn.addEventListener('click', toggleEdit);
   });
 
   // Toggle login/logout links
@@ -26,8 +32,9 @@ function signOut() {
 
   // Hide edit buttons and remove event listeners
   document.querySelectorAll('.edit-btn').forEach(btn => {
-    btn.style.display = 'none'; // Hide edit buttons when signed out
-    btn.removeEventListener('click', toggleEdit); // Remove the click event listener
+    console.log('Hiding edit button:', btn); // Debug log
+    btn.style.display = 'none';
+    btn.removeEventListener('click', toggleEdit);
   });
 
   // Toggle login/logout links
@@ -44,14 +51,14 @@ function toggleEdit(event) {
     const isEditable = content.getAttribute('contenteditable') === 'true';
     content.setAttribute('contenteditable', !isEditable);
     if (!isEditable) {
-      content.focus(); // Focus the content when it becomes editable
+      content.focus();
     }
   });
 
   if (button.textContent === 'Edit') {
-    button.textContent = 'Save'; // Change button text to "Save"
+    button.textContent = 'Save';
   } else {
-    button.textContent = 'Edit'; // Change button text back to "Edit"
+    button.textContent = 'Edit';
     // Here, you can add code to save the changes to the server (e.g., using AJAX)
   }
 
@@ -61,8 +68,15 @@ function toggleEdit(event) {
     const newItem = document.createElement('li');
     newItem.className = 'editable-content';
     newItem.setAttribute('contenteditable', 'true');
-    newItem.textContent = 'New item'; // Default text for new items
+    newItem.textContent = 'New item';
     ul.appendChild(newItem);
-    newItem.focus(); // Focus the new list item to start editing
+    newItem.focus();
   }
+}
+
+// Helper function to check if the user is signed in
+function isUserSignedIn() {
+  // Implement your logic to check if the user is signed in
+  // For example, check a cookie or local storage
+  return false; // Change this to your actual logic
 }
