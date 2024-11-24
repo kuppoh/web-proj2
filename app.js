@@ -137,7 +137,7 @@ function checkNotAuthenticated(req, res, next) {
 
 // Define authentication routes
 app.get('/auth/google',
-  passport.authenticate('google', { scope: ['profile', 'email'] })
+  passport.authenticate('google', { scope: ['profile', 'email'], session: false })
 );
 
 app.get('/auth/google/callback',
@@ -145,7 +145,7 @@ app.get('/auth/google/callback',
     console.log('Received callback from Google');
     next();
   },
-  passport.authenticate('google', { failureRedirect: '/login' }),
+  passport.authenticate('google', { failureRedirect: '/login', session: false}),
   (req, res) => {
     console.log('Google authentication successful');
     // Log the login event and the user's email
