@@ -154,7 +154,7 @@ app.get('/login', checkNotAuthenticated, (req, res) => {
 
 // Use the middleware for the /personal route
 app.get('/', (req, res) => {
-  res.render('personal', { isAuthenticated: req.isAuthenticated(), user: req.session.user || null });
+  res.render('personal', { isAuthenticated: req.isAuthenticated(), user: req.session.user });
 
 
   
