@@ -4,7 +4,7 @@ const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 
 const session = require('express-session');
-const RedisStore = require('connect-redis')(session);
+const RedisStore = require('connect-redis').default;
 const redis = require('redis');
 
 const app = express();
@@ -34,7 +34,7 @@ app.use(session({
   cookie: {
     secure: true,                                // Set to true if using HTTPS
     httpOnly: true,                               // Helps prevent XSS attacks
-    maxAge: 3600000                               // Session expiration time (1 hour)
+    maxAge: 24 * 60 * 60 * 1000                            // Session expiration time (1 hour)
   }
 }));
 
