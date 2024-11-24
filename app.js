@@ -20,7 +20,7 @@ app.set('views', path.join(__dirname, 'views'));
 
 // Create a Redis client
 const redisClient = redis.createClient({
-  host: 'localhost', // or your Redis server's host
+  host: '127.0.0.1', // or your Redis server's host
   port: 6379,        // default Redis port
   // password: 'your-redis-password' // if authentication is required
 });
