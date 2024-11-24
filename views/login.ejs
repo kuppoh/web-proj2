@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/styles.css">
+  <title>Login</title>
+</head>
+<body>
+  
+  <nav>
+    <ul>
+      <li style="color: #ae2012;">KW.</li>
+    </ul>
+  </nav>
+
+  <div id="sign-in-stuff">
+    <div class="sign-in-form">
+      <h2 class="highlight-word">Sign In</h2>
+      <form action="/login" method="post">
+        <label for="username" class="highlight-word">Username:</label>
+        <input type="text" id="username" name="username" required>
+        
+        <label for="password" class="highlight-word">Password:</label>
+        <input type="password" id="password" name="password" required>
+        
+        <button type="submit" class="login-btn">Sign-in</button>
+      </form>
+      <div class="or-divider">- or Sign In With -</div>
+      <button class="google-btn" onclick="signInWithGoogle()">Google</button>
+    </div>
+  </div>
+
+  <script>
+    function signInWithGoogle() {
+      // Add your Google sign-in logic here
+      alert("Google sign-in clicked");
+    }
+  </script>
+
+</body>
+</html>
