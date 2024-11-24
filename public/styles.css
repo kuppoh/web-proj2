@@ -1,0 +1,368 @@
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #0b090a;
+}
+
+.shift-this-lol {
+  margin-right: 20px;
+}
+
+nav {
+  background-color: #0b090a;
+  padding: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 1000; /* Ensure the navbar is above other content */
+}
+
+nav ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+}
+
+nav ul:first-child {
+  margin-right: auto;
+  color: white;
+  font-weight: bold;
+}
+
+nav ul li {
+  margin: 0 20px;
+  position: relative; /* Ensure dropdown is positioned relative to its parent */
+}
+
+nav ul li a {
+  color: white;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+/* Existing styles */
+
+nav ul li a:hover {
+  color: #ae2012;
+  text-decoration: none;
+}
+
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  top: 100%; /* Ensure the dropdown appears just below the trigger */
+  right: 0; /* Align dropdown to the right */
+  margin-top: 0; /* Remove any top margin to avoid gaps */
+  background-color: #f9f9f9;
+  min-width: 130px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+  border-radius: 8px;
+}
+
+.dropdown-content a {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+  border-radius: 8px;
+}
+
+.dropdown-content a:hover {
+  background-color: #f1f1f1;
+}
+
+.dropdown:hover .dropdown-content,
+.dropdown-content:hover {
+  display: block;
+}
+
+.hamburger-menu {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  width: 24px;
+  height: 24px;
+}
+
+.hamburger-menu div {
+  width: 100%;
+  height: 3px;
+  background-color: white;
+}
+
+body>div {
+  padding: 20px;
+}
+
+.highlight-word {
+  color: #ae2012;
+  font-weight: bold;
+  font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+}
+
+#about-me {
+  background-color: #0b090a;
+  display: flex;
+  align-items: center;
+  padding: 20px;
+  color: white;
+  height: 400px;
+}
+
+.more-content {
+  margin: 10%;
+}
+
+.about-me-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+#profile-pic {
+  width: 25vw; /* Increase width relative to the viewport width */
+  height: 25vw; /* Increase height relative to the viewport width */
+  max-width: 400px; /* Increase maximum width */
+  max-height: 400px; /* Increase maximum height */
+  margin-left: 20px;
+  margin-right: 20px;
+  border-radius: 50%; /* Make the image circular */
+  object-fit: cover; /* Crop the image to fit the container */
+
+  border-style: solid;
+  border-color: #f1f1f1;
+  border-width: 5px;
+  box-shadow: 0 0 0 5px #ae2012;
+}
+
+#about-me h2 {
+  margin-top: 0;
+}
+
+#hobbies {
+  background-color: #161a1d;
+  color: white;
+  padding: 20px;
+  height: 400px;
+  display: flex;
+  align-items: center; /* Center items vertically */
+}
+
+#hobbies .more-content {
+  margin-left: 20px; /* Add some space between the image and the content */
+}
+
+#hobbies>.more-content>ul>li {
+  margin: 15px;
+}
+
+#hobbies>img {
+  max-width: 30%; /* Adjust the width as needed */
+  height: auto;
+  object-fit: cover; /* Crop the image to fit the container */
+  /* border-style: solid;
+  border-color: #f1f1f1;
+  border-width: 5px;
+  box-shadow: 0 0 0 5px #ae2012; */
+
+  margin-left: 9%;
+}
+
+
+
+
+#projects {
+  background-color: #0b090a;
+  color: white;
+  padding: 20px;
+  height: 400px;
+}
+
+#github-contributions {
+  background-color: #161a1d;
+  color: white;
+  padding: 20px;
+  height: 400px;
+}
+
+#github-contributions p {
+  margin-left: 3%;
+}
+
+#contacts {
+  background-color: #0b090a;
+  color: white;
+  padding: 20px;
+  height: 100px;
+}
+
+.contact-details {
+  display: flex;
+  gap: 20px; /* Add space between the items */
+  justify-content: space-evenly;
+}
+
+.contact-details p {
+  margin: 0;
+}
+
+header {
+  position: relative;
+  text-align: center;
+  color: white;
+}
+
+.header-content {
+  position: relative;
+}
+
+header img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+header h1 {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  margin: 0;
+  font-size: 5em;
+  font-style: italic;
+  font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+  color: white;
+}
+
+#sign-in-stuff {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh; /* Ensure it takes the full viewport height */
+  color: black;
+
+}
+
+.sign-in-form {
+  background-color: white;
+
+  padding: 25px;
+  border-radius: 10px;
+
+}
+
+.sign-in-form h2 {
+  margin-top: 0;
+}
+
+.sign-in-form label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+.sign-in-form input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 30px;
+  border: 1px solid #d3d3d3;
+  background-color: #d3d3d3;
+  color: black;
+  border-radius: 5px;
+  box-sizing: border-box;
+}
+
+.login-btn {
+  background-color: #ae2012;
+  color: white;
+  padding: 10px 20px;
+  text-decoration: none;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  width: 100%;
+}
+
+.login-btn:hover {
+  background-color: #8b0000;
+}
+
+.or-divider {
+  text-align: center;
+  margin: 20px 0;
+  font-style: italic;
+  color: black;
+}
+
+.google-btn {
+  background-color: #ae2012;
+  color: white;
+  padding: 10px 20px;
+  text-decoration: none;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  width: 100%;
+}
+
+.google-btn:hover {
+  background-color: #8b0000;
+}
+
+.welcome-box {
+  color: white;
+  background-color: #161a1d;
+  padding: 25px;
+  text-align: center;
+
+}
+
+#calendar-component {
+  padding: 20px;
+  border-radius: 10px;
+  margin: 0 auto; /* Center horizontally */
+  text-align: center; /* Center content inside */
+}
+
+/* Media query for smaller screens */
+@media (max-width: 600px) {
+  nav ul li:not(.dropdown) {
+    display: none;
+  }
+
+  .dropdown-content {
+    min-width: 100px;
+  }
+
+  .dropdown-content a {
+    padding: 10px 12px;
+  }
+
+  .dropdown {
+    display: block;
+  }
+}
+
+/* Ensure dropdown stays open when hovering over dropdown-content */
+.dropdown:hover .dropdown-content,
+.dropdown-content:hover {
+  display: block;
+}
+
+/* New styles for responsive image */
+header img {
+  width: 100%;
+  height: auto;
+  display: block;
+}

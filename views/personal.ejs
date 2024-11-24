@@ -1,0 +1,96 @@
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/styles.css">
+  <script type="module" defer src="https://cdn.jsdelivr.net/gh/imananoosheh/github-contributions-fetch@latest/github_calendar_widget.js"></script>
+  <title>Personal Portfolio</title>
+</head>
+<body>
+
+  <nav>
+    <ul>
+      <li style="color: #ae2012;">KW.</li>
+    </ul>
+    <ul class="shift-this-lol">
+      <li><a href="#about-me">About Me</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#github-contributions">GitHub</a></li>
+      <li class="dropdown">
+        <a href="javascript:void(0)" class="dropbtn">
+          <div class="hamburger-menu">
+            <div></div>
+            <div></div>
+            <div></div>
+          </div>
+        </a>
+        <div class="dropdown-content">
+          <a href="#about-me">About Me</a>
+          <a href="#projects">Projects</a>
+          <a href="#github-contributions">GitHub Contributions</a>
+          <a href="/login" id="login-link" onclick="onSignIn()">Login</a>
+          <a href="#" id="logout-link" onclick="signOut()" style="display:none;">Logout</a>
+        </div>
+      </li>
+    </ul>
+  </nav>
+
+
+
+  <div id="about-me">
+    <div class="about-me-content">
+      <div class="more-content">
+        <h2 class="highlight-word">About Me</h2>
+        <p>Hey there, my name is <span class="highlight-word">Keziah</span> and here are some stuff about me!</p>
+        <p>
+          I am currently a student at the British Columbia Institute of Technology (BCIT), pursuing a diploma in the Computer Information Technology (CIT) program. With this diploma, I aspire to become a System Administrator and advance my interest in Cybersecurity!
+        </p>
+        <button class="edit-btn" style="display:none;">Edit</button>
+      </div>
+      <img id="profile-pic" src="/images/just-trying-it-out.png" alt="me">
+    </div>
+  </div>
+
+  <div id="hobbies">
+    <img src="/images/cam1.png" alt="idk">
+    <div style="margin-left: 5%; " class="more-content">
+      <h2 class="highlight-word">Some Hobbies I love:</h2>
+      
+      <ul>
+        <li>Building Computers and keyboards!</li>
+        <li>Going on walks (sometimes hiking)</li>
+        <li>Badminton</li>
+        <li>Reading Books! (currently on a Fantasy Genre Spree)</li>
+        <li>Photography!</li>
+        <li>and especially, food!</li>
+      </ul>
+    </div>
+
+
+  </div>
+
+  <div id="projects">
+    <h2>Projects</h2>
+    <p>Did nothing lol </p>
+    <button class="edit-btn" style="display:none;">Edit</button>
+  </div>
+
+  <div id="github-contributions">
+    <h2 class="highlight-word">GitHub</h2>
+    <p>My current activity and contributions on GitHub.</p>
+    <button class="edit-btn" style="display:none;">Edit</button>
+    <div id="calendar-component" username="kuppoh" theme-color="#ae2012" background-color="#161a1d"></div>
+  </div>
+
+  <div id="contacts">
+    <h2 class="highlight-word">Contacts</h2>
+    <div class="contact-details">
+      <p><span class="highlight-word">Email:</span> keziah@notreal.com</p>
+      <p><span class="highlight-word">Phone:</span> 666-000-6969</p>
+    </div>
+    <button class="edit-btn" style="display:none;">Edit</button>
+  </div>
+
+
+  <script src="https://apis.google.com/js/platform.js" async defer></script>
+  <script src="./js/main.js"></script>
+</body>
