@@ -30,10 +30,10 @@
           <a href="#projects">Projects</a>
           <a href="#github-contributions">GitHub Contributions</a>
           <% if (isAuthenticated) { %>
-            <a href="#" id="logout-link" onclick="signOut()">Logout</a>
-            <% } else { %>
-              <a href="/login" id="login-link" onclick="onSignIn()">Login</a>
-              <% } %>
+            <a href="/logout" id="logout-link">Logout</a>
+          <% } else { %>
+            <a href="/login" id="login-link">Login</a>
+          <% } %>
         </div>
       </li>
     </ul>
