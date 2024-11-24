@@ -177,10 +177,9 @@ app.get('/logout', checkAuthenticated, (req, res) => {
     console.log('User logged out, but email not available');
   }
 
-  req.logout((err) => {
-    if (err) { return next(err); }
-    res.redirect('/login');
-  });
+// Clear the JWT cookie
+  res.clearCookie('jwt');
+  res.redirect('/login');
 });
 
 
