@@ -321,12 +321,14 @@ header h1 {
 .google-btn {
   background-color: #ae2012;
   color: white;
-  padding: 10px 20px;
+  padding: 10px 0px;
   text-decoration: none;
   border: none;
   border-radius: 5px;
   cursor: pointer;
   width: 100%;
+  justify-content: center;
+  display: flex;
 }
 
 .google-btn:hover {
