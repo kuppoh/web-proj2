@@ -36,7 +36,7 @@ function checkNotAuthenticated(req, res, next) {
 
 // Check if the user is authorized to edit the portfolio
 function checkAuthorizedToEdit(req, res, next) {
-  const allowedEmail = 'your-email@example.com'; // Replace with your email
+  const allowedEmail = 'kwacnang.23@gmail.com'; // Replace with your email
   if (req.user && req.user.emails && req.user.emails[0].value === allowedEmail) {
     return next();
   }
