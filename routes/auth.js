@@ -24,7 +24,10 @@ router.get('/google/callback',
     
     // Set JWT token in cookies
     res.cookie('jwt', token, { httpOnly: true, secure: false, maxAge: 24 * 60 * 60 * 1000 });
-    console.log("Authenticated + JWT :", user, "|", user.emails)
+    console.log("Authenticated + JWT :", user, "|", user.emails);
+    
+    // Log user login
+    console.log(`User logged in: ${user.displayName} (${user.emails[0].value})`);
     
     res.redirect('/'); // Redirect to home page or wherever you want
   }
@@ -39,6 +42,7 @@ router.get('/login', checkNotAuthenticated, (req, res) => {
 // logout
 router.get('/logout', checkAuthenticated, (req, res) => {
   res.clearCookie('jwt', { path: '/' });
+  console.log(`User logged out: ${req.user.displayName} | ${req.user.emails}`)
   res.redirect('/');
 });
 

@@ -24,21 +24,21 @@ const editRoutes = require('./routes/edit');
 // Middleware to make isAuthenticated globally available
 // app.js
 app.use((req, res, next) => {
-  const token = req.cookies.jwt;
-  if (token) {
-      jwt.verify(token, 'your-secret-key', (err, decoded) => {
-          if (!err) {
-              req.user = decoded; // Attach user to the request
-              res.locals.isAuthenticated = true; // Set isAuthenticated globally
-          } else {
-              res.locals.isAuthenticated = false;
-          }
-          next();
-      });
-  } else {
-      res.locals.isAuthenticated = false;
-      next();
-  }
+    const token = req.cookies.jwt;
+    if (token) {
+        jwt.verify(token, 'your-secret-key', (err, decoded) => {
+            if (!err) {
+                req.user = decoded; // Attach user to the request
+                res.locals.isAuthenticated = true; // Set isAuthenticated globally
+            } else {
+                res.locals.isAuthenticated = false;
+            }
+            next();
+        });
+    } else {
+        res.locals.isAuthenticated = false;
+        next();
+    }
 });
 
 // Route Usage
@@ -48,7 +48,7 @@ app.use('/edit', editRoutes);
 
 // 404 Error Handling
 app.use((req, res) => {
-  res.status(404).render('personal')
+    res.status(404).render('personal')
 });
 
 

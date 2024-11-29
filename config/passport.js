@@ -1,7 +1,7 @@
 const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 
-const secretKey = process.env.SECRET_KEY || 'your-secret-key'; // Use environment variables for security
+const secretKey = 'your-secret-key'; // Use environment variables for security
 
 passport.use(new GoogleStrategy({
   clientID: '624534888737-450ntk4o8gvsdgc9emnuv3tv6pk6jocu.apps.googleusercontent.com',
