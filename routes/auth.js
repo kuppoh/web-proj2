@@ -42,7 +42,7 @@ router.get('/login', checkNotAuthenticated, (req, res) => {
 // logout
 router.get('/logout', checkAuthenticated, (req, res) => {
   res.clearCookie('jwt', { path: '/' });
-  console.log(`User logged out: ${req.user.displayName} | ${req.user.emails}`)
+  console.log(`User logged out: ${req.user.displayName} | ${req.user.emails[0].value}`)
   res.redirect('/');
 });
 
