@@ -5,11 +5,12 @@
   <script type="module" defer src="https://cdn.jsdelivr.net/gh/imananoosheh/github-contributions-fetch@latest/github_calendar_widget.js"></script>
   <title>Personal Portfolio</title>
 </head>
+
 <body>
 
   <nav>
     <ul>
-      <li style="color: #ae2012;">KW.</li>
+      <li class="highlight-word">KW.</li>
     </ul>
     <ul class="shift-this-lol">
       <li><a href="#about-me">About Me</a></li>
@@ -27,24 +28,26 @@
           <a href="#about-me">About Me</a>
           <a href="#projects">Projects</a>
           <a href="#github-contributions">GitHub Contributions</a>
-          <a href="/login" id="login-link" onclick="onSignIn()">Login</a>
-          <a href="#" id="logout-link" onclick="signOut()" style="display:none;">Logout</a>
+          <% if (isAuthenticated) { %>
+            <a href="/logout" id="logout-link">Logout</a>
+          <% } else { %>
+            <a href="/login" id="login-link">Login</a>
+          <% } %>
         </div>
       </li>
     </ul>
   </nav>
 
 
-
   <div id="about-me">
     <div class="about-me-content">
       <div class="more-content">
         <h2 class="highlight-word">About Me</h2>
-        <p>Hey there, my name is <span class="highlight-word">Keziah</span> and here are some stuff about me!</p>
-        <p>
-          I am currently a student at the British Columbia Institute of Technology (BCIT), pursuing a diploma in the Computer Information Technology (CIT) program. With this diploma, I aspire to become a System Administrator and advance my interest in Cybersecurity!
-        </p>
-        <button class="edit-btn" style="display:none;">Edit</button>
+        <p class="editable-content" contenteditable="false">Hey there, my name is <span class="highlight-word">Keziah</span> and here are some stuff about me!</p>
+        <p class="editable-content" contenteditable="false">I am currently a student at the British Columbia Institute of Technology (BCIT), pursuing a diploma in the Computer Information Technology (CIT) program. With this diploma, I aspire to become a System Administrator and advance my interest in Cybersecurity!</p>
+        <% if (isAuthenticated) { %>
+          <button class="edit-btn" onclick="toggleEditMode(this)">Edit</button>
+        <% } %>
       </div>
       <img id="profile-pic" src="/images/just-trying-it-out.png" alt="me">
     </div>
@@ -52,45 +55,88 @@
 
   <div id="hobbies">
     <img src="/images/cam1.png" alt="idk">
-    <div style="margin-left: 5%; " class="more-content">
-      <h2 class="highlight-word">Some Hobbies I love:</h2>
-      
+    <div style="margin-left: 5%;" class="more-content">
+      <h2 class="highlight-word editable-content" contenteditable="false">Some Hobbies I love:</h2>
+      <% if (isAuthenticated) { %>
+        <button class="edit-btn" onclick="toggleEditMode(this)">Edit</button>
+      <% } %>
       <ul>
-        <li>Building Computers and keyboards!</li>
-        <li>Going on walks (sometimes hiking)</li>
-        <li>Badminton</li>
-        <li>Reading Books! (currently on a Fantasy Genre Spree)</li>
-        <li>Photography!</li>
-        <li>and especially, food!</li>
+        <li class="editable-content" contenteditable="false">Building Computers and keyboards!</li>
+        <li class="editable-content" contenteditable="false">Going on walks (sometimes hiking)</li>
+        <li class="editable-content" contenteditable="false">Badminton</li>
+        <li class="editable-content" contenteditable="false">Reading Books! (currently on a Fantasy Genre Spree)</li>
+        <li class="editable-content" contenteditable="false">Photography!</li>
+        <li class="editable-content" contenteditable="false">and especially, food!</li>
       </ul>
     </div>
-
-
   </div>
 
   <div id="projects">
-    <h2>Projects</h2>
-    <p>Did nothing lol </p>
-    <button class="edit-btn" style="display:none;">Edit</button>
+    <div>
+      <h2 class="highlight-word">Projects</h2>
+      <div class="projects-container">
+        <div>
+          <h4 class="highlight-word editable-content" contenteditable="false">VetVault (Pet Tracker)</h4>
+          <% if (isAuthenticated) { %>
+            <button class="edit-btn" onclick="toggleEditMode(this)">Edit</button>
+          <% } %>
+          <ul>
+            <li class="editable-content" contenteditable="false">A mini-project to track your furry friends or animals.</li>
+            <li class="editable-content" contenteditable="false">It also simulates Customer-Vetrinarian communication to facilitate medicine for their animals.</li>
+            <li class="editable-content" contenteditable="false">Uses MySQL database where we incorporated triggers, and other functions.</li>
+            <li class="editable-content" contenteditable="false">Node.JS for backend, with login system as well.</li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="highlight-word editable-content" contenteditable="false">RemindlyProject</h4>
+          <% if (isAuthenticated) { %>
+            <button class="edit-btn" onclick="toggleEditMode(this)">Edit</button>
+          <% } %>
+          <ul>
+            <li class="editable-content" contenteditable="false">Is a reminder web application, where you can add, delete, and edit reminders.</li>
+            <li class="editable-content" contenteditable="false">Utilizes Node.JS and other node modules such as "passport" and "OAuth".</li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="highlight-word editable-content" contenteditable="false">Subscription System</h4>
+          <% if (isAuthenticated) { %>
+            <button class="edit-btn" onclick="toggleEditMode(this)">Edit</button>
+          <% } %>
+          <ul>
+            <li class="editable-content" contenteditable="false">Currently working in progress</li>
+            <li class="editable-content" contenteditable="false">The aim is to have a subscription system working along with creating a working free-trial.</li>
+            <li class="editable-content" contenteditable="false">Utilizes Google Cloud Project, and its services to fully deploy the application.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
   </div>
 
   <div id="github-contributions">
     <h2 class="highlight-word">GitHub</h2>
-    <p>My current activity and contributions on GitHub.</p>
-    <button class="edit-btn" style="display:none;">Edit</button>
+    <p class="editable-content" contenteditable="false">My current activity and contributions on GitHub.</p>
+    <% if (isAuthenticated) { %>
+      <button class="edit-btn" onclick="toggleEditMode(this)">Edit</button>
+    <% } %>
     <div id="calendar-component" username="kuppoh" theme-color="#ae2012" background-color="#161a1d"></div>
   </div>
 
   <div id="contacts">
     <h2 class="highlight-word">Contacts</h2>
     <div class="contact-details">
-      <p><span class="highlight-word">Email:</span> keziah@notreal.com</p>
-      <p><span class="highlight-word">Phone:</span> 666-000-6969</p>
+      <p><span class="highlight-word editable-content" contenteditable="false">Email:</span> keziah@notreal.com</p>
+      <p><span class="highlight-word editable-content" contenteditable="false">Phone:</span> 666-000-6969</p>
     </div>
-    <button class="edit-btn" style="display:none;">Edit</button>
+    <% if (isAuthenticated) { %>
+      <button class="edit-btn" onclick="toggleEditMode(this)">Edit</button>
+    <% } %>
   </div>
-
+  <script>
+    var isAuthenticated = <%= JSON.stringify(isAuthenticated) %>;
+  </script>
 
   <script src="https://apis.google.com/js/platform.js" async defer></script>
-  <script src="./js/main.js"></script>
+  <script src="/js/main.js"></script>
 </body>
