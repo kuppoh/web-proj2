@@ -118,7 +118,7 @@ function toggleEdit(event) {
 function signInWithGoogle() {
   gapi.load('auth2', function() {
     const auth2 = gapi.auth2.init({
-      client_id: 'YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com',
+      client_id: '624534888737-450ntk4o8gvsdgc9emnuv3tv6pk6jocu.apps.googleusercontent.com',
     });
     auth2.signIn().then(function(googleUser) {
       const id_token = googleUser.getAuthResponse().id_token;
