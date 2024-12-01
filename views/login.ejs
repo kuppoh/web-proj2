@@ -32,28 +32,9 @@
         const auth2 = gapi.auth2.init({
           client_id: '624534888737-450ntk4o8gvsdgc9emnuv3tv6pk6jocu.apps.googleusercontent.com',
         });
-        auth2.signIn().then(function(googleUser) {
-          console.log('User signed in');
-          const id_token = googleUser.getAuthResponse().id_token;
-          fetch('/auth/google', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ token: id_token })
-          }).then(response => {
-            if (response.ok) {
-              console.log('Sign-in successful, redirecting...');
-              window.location.href = '/';
-            } else {
-              console.error('Google sign-in failed');
-              alert('Google sign-in failed');
-            }
-          }).catch(error => {
-            console.error('Error during fetch:', error);
-          });
-        }).catch(error => {
-          console.error('Error during sign-in:', error);
+        auth2.signIn({
+          ux_mode: 'redirect',
+          redirect_uri: 'http://localhost:3000/auth/google/callback'
         });
       });
     }
