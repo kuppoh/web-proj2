@@ -29,6 +29,15 @@ document.addEventListener('DOMContentLoaded', () => {
       .catch(error => console.error('Error:', error));
     });
   }
+
+  // Add event listener for the login link
+  const loginLink = document.getElementById('login-link');
+  if (loginLink) {
+    loginLink.addEventListener('click', (event) => {
+      event.preventDefault();
+      window.location.href = '/auth/login';
+    });
+  }
 });
 
 function onSignIn() {
