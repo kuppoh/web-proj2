@@ -3,17 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="/styles.css">
   <title>Login</title>
+  <script src="https://apis.google.com/js/platform.js" async defer></script>
 </head>
 <body>
-  
-  <nav>
-    <ul>
-      <li style="color: #ae2012;">KW.</li>
-    </ul>
-  </nav>
-
   <div id="sign-in-stuff">
     <div class="sign-in-form">
       <h2 class="highlight-word">Sign In</h2>
@@ -30,6 +23,39 @@
       <button class="google-btn" onclick="signInWithGoogle()">Google</button>
     </div>
   </div>
-  <script src="main.js"></script>
+  <script>
+    function signInWithGoogle() {
+      console.log('signInWithGoogle called');
+      gapi.load('auth2', function() {
+        console.log('gapi.auth2 loaded');
+        const auth2 = gapi.auth2.init({
+          client_id: '624534888737-450ntk4o8gvsdgc9emnuv3tv6pk6jocu.apps.googleusercontent.com',
+        });
+        auth2.signIn().then(function(googleUser) {
+          console.log('User signed in');
+          const id_token = googleUser.getAuthResponse().id_token;
+          fetch('/auth/google', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ token: id_token })
+          }).then(response => {
+            if (response.ok) {
+              console.log('Sign-in successful, redirecting...');
+              window.location.href = '/';
+            } else {
+              console.error('Google sign-in failed');
+              alert('Google sign-in failed');
+            }
+          }).catch(error => {
+            console.error('Error during fetch:', error);
+          });
+        }).catch(error => {
+          console.error('Error during sign-in:', error);
+        });
+      });
+    }
+  </script>
 </body>
 </html>

@@ -115,26 +115,3 @@ function toggleEdit(event) {
   }
 }
 
-function signInWithGoogle() {
-  gapi.load('auth2', function() {
-    const auth2 = gapi.auth2.init({
-      client_id: '624534888737-450ntk4o8gvsdgc9emnuv3tv6pk6jocu.apps.googleusercontent.com',
-    });
-    auth2.signIn().then(function(googleUser) {
-      const id_token = googleUser.getAuthResponse().id_token;
-      fetch('/auth/google', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ token: id_token })
-      }).then(response => {
-        if (response.ok) {
-          window.location.href = '/';
-        } else {
-          alert('Google sign-in failed');
-        }
-      });
-    });
-  });
-}
