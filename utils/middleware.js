@@ -26,13 +26,17 @@ function checkAuthenticated(req, res, next) {
 
 
 // Check if the user is not authenticated
-function checkNotAuthenticated(req, res, next) {
+const checkNotAuthenticated = (req, res, next) => {
   const token = req.cookies.jwt;
   if (token) {
-    return res.redirect('/');
+    jwt.verify(token, 'your-secret-key', (err, decoded) => {
+      if (!err) {
+        return res.redirect('/');
+      }
+    });
   }
   next();
-}
+};
 
 // Check if the user is authorized to edit the portfolio
 function checkAuthorizedToEdit(req, res, next) {

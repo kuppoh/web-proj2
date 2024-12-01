@@ -33,6 +33,10 @@ router.get('/google/callback',
   }
 );
 
+router.post('/login', (req, res) => {
+  console.log(`User logged in: ${req.user.displayName} (${req.user.emails[0].value})`);
+  res.redirect('/'); // Redirect to home page or wherever you want
+});
 
 // login
 router.get('/login', checkNotAuthenticated, (req, res) => {
