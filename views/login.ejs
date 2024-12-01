@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="/styles.css">
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
   <title>Login</title>
 </head>
 <body>
@@ -27,9 +28,49 @@
         <button type="submit" class="login-btn">Sign-in</button>
       </form>
       <div class="or-divider">- or Sign In With -</div>
-      <a href="/auth/google" class="google-btn">Google</a>
+      <div id="google-button-container"></div> <!-- Placeholder for Google Sign-In -->
     </div>
   </div>
 
+  <script>
+    window.onload = function() {
+      google.accounts.id.initialize({
+        client_id: '624534888737-450ntk4o8gvsdgc9emnuv3tv6pk6jocu.apps.googleusercontent.com',
+        callback: handleCredentialResponse,
+      });
+
+      google.accounts.id.renderButton(
+        document.getElementById('google-button-container'),
+        { theme: 'outline', size: 'large' } // Customize the button style
+      );
+
+      google.accounts.id.prompt(); // Automatically prompts the One Tap dialog if applicable
+    };
+
+    function handleCredentialResponse(response) {
+      console.log('Encoded JWT ID token:', response.credential);
+      
+      // Send the token to your backend for verification
+      fetch('/auth/google/callback', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ credential: response.credential }),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.success) {
+            // Redirect to the authenticated user's page
+            window.location.href = '/dashboard';
+          } else {
+            console.error('Authentication failed:', data.error);
+          }
+        })
+        .catch((error) => {
+          console.error('Error during authentication:', error);
+        });
+    }
+  </script>
 </body>
 </html>
