@@ -8,6 +8,27 @@ document.addEventListener('DOMContentLoaded', () => {
   if (typeof isAuthenticated !== 'undefined' && isAuthenticated) {
     onSignIn();
   }
+
+  // Add event listener for the logout link
+  const logoutLink = document.getElementById('logout-link');
+  if (logoutLink) {
+    logoutLink.addEventListener('click', (event) => {
+      event.preventDefault();
+      fetch('/auth/logout', {
+        method: 'GET',
+        credentials: 'same-origin'
+      })
+      .then(response => {
+        if (response.ok) {
+          signOut();
+          window.location.href = '/';
+        } else {
+          console.error('Logout failed');
+        }
+      })
+      .catch(error => console.error('Error:', error));
+    });
+  }
 });
 
 function onSignIn() {
