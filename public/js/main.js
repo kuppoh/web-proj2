@@ -114,3 +114,27 @@ function toggleEdit(event) {
     newItem.focus();
   }
 }
+
+function signInWithGoogle() {
+  gapi.load('auth2', function() {
+    const auth2 = gapi.auth2.init({
+      client_id: 'YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com',
+    });
+    auth2.signIn().then(function(googleUser) {
+      const id_token = googleUser.getAuthResponse().id_token;
+      fetch('/auth/google', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ token: id_token })
+      }).then(response => {
+        if (response.ok) {
+          window.location.href = '/';
+        } else {
+          alert('Google sign-in failed');
+        }
+      });
+    });
+  });
+}
