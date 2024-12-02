@@ -55,19 +55,23 @@ passport.deserializeUser((obj, done) => {
   done(null, obj);
 });
 
-const AWS = require('aws-sdk');
+const { S3Client, PutObjectCommand } = require('@aws-sdk/client-s3');
+const { Endpoint } = require('@aws-sdk/types');
+
 
 require('dotenv').config();
 
-// Set up the AWS SDK with DigitalOcean Spaces credentials
-const spacesEndpoint = new AWS.Endpoint('web-project.sfo3.digitaloceanspaces.com');
+const spacesEndpoint = new Endpoint('https://web-project.sfo3.digitaloceanspaces.com');
 
-const s3 = new AWS.S3({
-  endpoint: spacesEndpoint,
-  accessKeyId: process.env.DO_ACCESS_KEY,  // Replace with your DigitalOcean Spaces access key
-  secretAccessKey: process.env.DO_SECRET_KEY,  // Replace with your DigitalOcean Spaces secret key
-  region: 'sf03', 
+const s3Client = new S3Client({
+  region: 'sf03',  // DigitalOcean's region
+  credentials: {
+    accessKeyId: process.env.DO_ACCESS_KEY,
+    secretAccessKey: process.env.DO_SECRET_KEY
+  },
+  endpoint: spacesEndpoint
 });
+
 
 // Middleware to check if the user is authenticated
 function checkAuthenticated(req, res, next) {
@@ -150,7 +154,10 @@ app.get('/', checkAuthenticated, async (req, res) => {
 });
 
 // Route for uploading a file
-app.post('/upload', upload.single('file'), (req, res) => {
+const fs = require('fs');
+
+// Route for uploading a file
+app.post('/upload', upload.single('file'), async (req, res) => {
   if (!req.file) {
     return res.status(400).send('No file uploaded.');
   }
@@ -158,7 +165,7 @@ app.post('/upload', upload.single('file'), (req, res) => {
   // Prepare file for upload to DigitalOcean Spaces
   const fileContent = fs.readFileSync(req.file.path);  // Read the file from local storage
 
-  // Upload the file to DigitalOcean Spaces
+  // Set the parameters for the S3 upload
   const params = {
     Bucket: 'your-space-name',  // Replace with your Space's name
     Key: req.file.originalname, // The name of the file in Spaces
@@ -166,11 +173,10 @@ app.post('/upload', upload.single('file'), (req, res) => {
     ACL: 'public-read'          // You can set it to private or other permissions
   };
 
-  s3.upload(params, (err, data) => {
-    if (err) {
-      console.log(err);
-      return res.status(500).send('Error uploading file');
-    }
+  try {
+    // Upload the file to DigitalOcean Spaces
+    const command = new PutObjectCommand(params);
+    const data = await s3Client.send(command);
 
     // Remove the file from the local temporary storage
     fs.unlinkSync(req.file.path);
@@ -178,10 +184,14 @@ app.post('/upload', upload.single('file'), (req, res) => {
     // Send response with the file URL from Spaces
     res.send({
       message: 'File uploaded successfully',
-      fileUrl: data.Location  // URL to access the uploaded file
+      fileUrl: `https://${params.Bucket}.${spacesEndpoint.hostname}/${params.Key}`  // URL to access the uploaded file
     });
-  });
+  } catch (err) {
+    console.log(err);
+    return res.status(500).send('Error uploading file');
+  }
 });
+
 
 const fetch = require('node-fetch');
 
