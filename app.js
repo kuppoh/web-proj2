@@ -153,8 +153,7 @@ app.get('/', checkAuthenticated, async (req, res) => {
   });
 });
 
-// Route for uploading a file
-const fs = require('fs');
+
 
 // Route for uploading a file
 app.post('/upload', upload.single('file'), async (req, res) => {
