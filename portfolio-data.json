@@ -1,0 +1,49 @@
+{
+  "aboutMe": {
+    "description": [
+      "Hey there, my name is Keziah and here are some stuff about me!",
+      "I am currently a student at the British Columbia Institute of Technology (BCIT), pursuing a diploma in the Computer Information Technology (CIT) program. With this diploma, I aspire to become a System Administrator and advance my interest in Cybersecurity!"
+    ]
+  },
+  "hobbies": [
+    "Building Computers and keyboards!",
+    "Going on walks (sometimes hiking)",
+    "Badminton",
+    "Reading Books! (currently on a Fantasy Genre Spree)",
+    "Photography!",
+    "And especially, food!"
+  ],
+  "projects": [
+    {
+      "name": "VetVault (Pet Tracker)",
+      "description": [
+        "A mini-project to track your furry friends or animals.",
+        "It also simulates Customer-Veterinarian communication to facilitate medicine for their animals.",
+        "Uses MySQL database where we incorporated triggers, and other functions.",
+        "Node.JS for backend, with login system as well."
+      ]
+    },
+    {
+      "name": "RemindlyProject",
+      "description": [
+        "A reminder web application, where you can add, delete, and edit reminders.",
+        "Utilizes Node.JS and other node modules such as 'passport' and 'OAuth'."
+      ]
+    },
+    {
+      "name": "Subscription System",
+      "description": [
+        "Currently a work in progress.",
+        "The aim is to have a subscription system working along with creating a working free trial.",
+        "Utilizes Google Cloud Project and its services to fully deploy the application."
+      ]
+    }
+  ],
+  "githubContributions": {
+    "description": "My current activity and contributions on GitHub."
+  },
+  "contacts": {
+    "email": "keziah@notreal.com",
+    "phone": "666-000-6969"
+  }
+}

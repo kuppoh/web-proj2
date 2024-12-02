@@ -4,6 +4,11 @@ const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const cookieParser = require('cookie-parser');
 const jwt = require('jsonwebtoken');
+const multer = require('multer');
+const upload = multer({dest: 'uploads/'}) // temp storage
+require('dotenv').config();
+const fs = require('fs');
+
 
 const app = express();
 
@@ -18,11 +23,13 @@ app.use(cookieParser());
 
 const secretKey = 'your-secret-key'; // Replace with a strong secret key
 
+
 // Configure Passport to use Google OAuth strategy
 passport.use(new GoogleStrategy({
-  clientID: '624534888737-450ntk4o8gvsdgc9emnuv3tv6pk6jocu.apps.googleusercontent.com',
-  clientSecret: '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',
-  callbackURL: 'https://portfolio.rat-monkee.online/auth/google/callback'
+  clientID: process.env.G_CLIENT_ID,
+  clientSecret: process.env.G_CLIENT_SECRET,
+  callbackURL:  process.env.G_CALLBACK_URL
+
 }, (accessToken, refreshToken, profile, done) => {
   console.log('Received callback from Google');
   console.log('Access Token:', accessToken);
@@ -46,6 +53,20 @@ passport.serializeUser((user, done) => {
 // Deserialize user from the sessions
 passport.deserializeUser((obj, done) => {
   done(null, obj);
+});
+
+const AWS = require('aws-sdk');
+
+require('dotenv').config();
+
+// Set up the AWS SDK with DigitalOcean Spaces credentials
+const spacesEndpoint = new AWS.Endpoint('web-project.sfo3.digitaloceanspaces.com');
+
+const s3 = new AWS.S3({
+  endpoint: spacesEndpoint,
+  accessKeyId: process.env.DO_ACCESS_KEY,  // Replace with your DigitalOcean Spaces access key
+  secretAccessKey: process.env.DO_SECRET_KEY,  // Replace with your DigitalOcean Spaces secret key
+  region: 'sf03', 
 });
 
 // Middleware to check if the user is authenticated
@@ -80,33 +101,18 @@ app.get('/auth/google',
 );
 
 app.get('/auth/google/callback',
-  (req, res, next) => {
-    console.log('Received callback from Google');
-    next();
-  },
   passport.authenticate('google', { failureRedirect: '/login', session: false }),
   (req, res) => {
-    console.log('Google authentication successful');
-    if (req.isAuthenticated()) {
-      if (req.user && req.user.emails && req.user.emails[0]) {
-        console.log(`User logged in: ${req.user.emails[0].value}`);
-      } else {
-        console.log('User logged in, but email not available');
-      }
-      // Create JWT token
-      const user = {
-        displayName: req.user.displayName,
-        emails: req.user.emails
-      };
-      const token = jwt.sign(user, secretKey, { expiresIn: '1d' });
-      res.cookie('jwt', token, { httpOnly: true, secure: false, maxAge: 24 * 60 * 60 * 1000 });
-      res.redirect('/?loggedIn=true');
-    } else {
-      console.log('User not authenticated');
-      res.redirect('/login');
-    }
+    const user = {
+      displayName: req.user.displayName,
+      emails: req.user.emails
+    };
+    const token = jwt.sign(user, secretKey, { expiresIn: '1d' });
+    res.cookie('jwt', token, { httpOnly: true, secure: false, maxAge: 24 * 60 * 60 * 1000 });
+    res.redirect('/?loggedIn=true');
   }
 );
+
 
 app.get('/logout', checkAuthenticated, (req, res) => {
   if (req.user && req.user.emails && req.user.emails[0]) {
@@ -126,15 +132,64 @@ app.get('/login', checkNotAuthenticated, (req, res) => {
 });
 
 // Use the middleware for the /personal route
-app.get('/', checkAuthenticated, (req, res) => {
+app.get('/', checkAuthenticated, async (req, res) => {
   const isAuthenticated = !!req.user;
-  console.log('isAuthenticated:', isAuthenticated);
-  console.log('user:', req.user);
+  let portfolioData = {};
+
+  try {
+    portfolioData = await getContent();
+  } catch (err) {
+    console.error('Error fetching portfolio data:', err);
+  }
+
   res.render('personal', { 
     isAuthenticated, 
-    user: req.user ? { displayName: req.user.displayName, emails: req.user.emails } : null 
+    user: req.user ? { displayName: req.user.displayName, emails: req.user.emails } : null,
+    portfolioData
   });
 });
+
+// Route for uploading a file
+app.post('/upload', upload.single('file'), (req, res) => {
+  if (!req.file) {
+    return res.status(400).send('No file uploaded.');
+  }
+
+  // Prepare file for upload to DigitalOcean Spaces
+  const fileContent = fs.readFileSync(req.file.path);  // Read the file from local storage
+
+  // Upload the file to DigitalOcean Spaces
+  const params = {
+    Bucket: 'your-space-name',  // Replace with your Space's name
+    Key: req.file.originalname, // The name of the file in Spaces
+    Body: fileContent,
+    ACL: 'public-read'          // You can set it to private or other permissions
+  };
+
+  s3.upload(params, (err, data) => {
+    if (err) {
+      console.log(err);
+      return res.status(500).send('Error uploading file');
+    }
+
+    // Remove the file from the local temporary storage
+    fs.unlinkSync(req.file.path);
+
+    // Send response with the file URL from Spaces
+    res.send({
+      message: 'File uploaded successfully',
+      fileUrl: data.Location  // URL to access the uploaded file
+    });
+  });
+});
+
+const fetch = require('node-fetch');
+
+async function getContent() {
+  const response = await fetch('https://web-project.sfo3.digitaloceanspaces.com/portfolio-data.json');
+  const data = await response.json();
+  return data;
+}
 
 // Start the server
 app.listen(3000, () => {

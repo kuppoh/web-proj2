@@ -46,8 +46,12 @@
     <div class="about-me-content">
       <div class="more-content">
         <h2 class="highlight-word">About Me</h2>
-        <p class="editable-content" contenteditable="false">Hey there, my name is <span class="highlight-word">Keziah</span> and here are some stuff about me!</p>
-        <p class="editable-content" contenteditable="false">I am currently a student at the British Columbia Institute of Technology (BCIT), pursuing a diploma in the Computer Information Technology (CIT) program. With this diploma, I aspire to become a System Administrator and advance my interest in Cybersecurity!</p>
+        <p class="editable-content" contenteditable="<%= isAuthenticated ? 'false' : 'true' %>">
+          Hey there, my name is <span class="highlight-word">Keziah</span> and here are some stuff about me!
+        </p>
+        <p class="editable-content" contenteditable="<%= isAuthenticated ? 'false' : 'true' %>">
+          I am currently a student at the British Columbia Institute of Technology (BCIT), pursuing a diploma in the Computer Information Technology (CIT) program.
+        </p>
         <% if (isAuthenticated) { %>
           <button class="edit-btn" onclick="toggleEditMode(this)">Edit</button>
         <% } %>
