@@ -61,15 +61,16 @@ const { Endpoint } = require('@aws-sdk/types');
 
 require('dotenv').config();
 
-const spacesEndpoint = new Endpoint('https://web-project.sfo3.digitaloceanspaces.com');
 
+// Initialize the S3 client with the endpoint URL directly
 const s3Client = new S3Client({
-  region: 'sf03',  // DigitalOcean's region
+  region: 'sfo3',  // DigitalOcean's region
   credentials: {
     accessKeyId: process.env.DO_ACCESS_KEY,
     secretAccessKey: process.env.DO_SECRET_KEY
   },
-  endpoint: spacesEndpoint
+  endpoint: 'https://sfo3.digitaloceanspaces.com', // Directly specify the endpoint URL
+  forcePathStyle: true // Required for DigitalOcean Spaces
 });
 
 
