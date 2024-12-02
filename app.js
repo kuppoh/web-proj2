@@ -197,7 +197,7 @@ const fetch = require('node-fetch');
 
 async function getContent() {
   try {
-    const response = await fetch('your-api-url');
+    const response = await fetch('https://web-project.sfo3.digitaloceanspaces.com/portfolio-data.json');
     const text = await response.text();  // Read the response body as text first
     console.log('Response Status:', response.status);
     console.log('Response Body:', text); // Log the response body
