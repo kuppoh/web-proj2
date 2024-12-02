@@ -196,10 +196,25 @@ app.post('/upload', upload.single('file'), async (req, res) => {
 const fetch = require('node-fetch');
 
 async function getContent() {
-  const response = await fetch('https://web-project.sfo3.digitaloceanspaces.com/portfolio-data.json');
-  const data = await response.json();
-  return data;
+  try {
+    const response = await fetch('your-api-url');
+    const text = await response.text();  // Read the response body as text first
+    console.log('Response Status:', response.status);
+    console.log('Response Body:', text); // Log the response body
+
+    if (response.ok) {
+      // If the response is valid JSON, try to parse it
+      const data = JSON.parse(text);
+      console.log('Fetched data:', data);
+    } else {
+      console.error('Failed to fetch data. Status:', response.status);
+    }
+  } catch (err) {
+    console.error('Error fetching portfolio data:', err);
+  }
 }
+
+getContent();
 
 // Start the server
 app.listen(3000, () => {
