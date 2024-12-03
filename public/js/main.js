@@ -143,8 +143,8 @@ function openEditHobbiesModal() {
 
 // Open the Hobbies modal
 function openEditProjectModal() {
-  console.log('Opening Hobbies modal');
-  const modal = document.getElementById('edit-hobbies-modal');
+  console.log('Opening Projects modal');
+  const modal = document.getElementById('edit-projects-modal');
   modal.style.display = 'block'; // Show the modal
 }
 
