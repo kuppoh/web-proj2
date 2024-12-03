@@ -381,6 +381,9 @@ header h1 {
   color: black; /* Or any other color to make it visible */
 }
 
+.modal-content form label {
+  color: black;
+}
 
 /* The Close Button */
 .close {
