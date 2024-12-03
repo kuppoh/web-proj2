@@ -117,7 +117,7 @@
         <div>
           <h4 class="highlight-word editable-content" contenteditable="false"><%= project.name %></h4>
           <% if (isAuthenticated) { %>
-            <button class="edit-btn" onclick="openEditProjectModal()">Edit</button>
+            <button class="edit-btn" onclick="openEditProjectModal('<%= project.projectId %>')">Edit</button>
           <% } %>
           <ul>
             <% project.description.forEach(function(desc) { %>
@@ -131,11 +131,10 @@
 </div>
 
 
-
-<!-- Modal for editing Projects -->
-<div id="edit-projects-modal" class="modal">
+<!-- Modal for Editing Project -->
+<div id="edit-projects-modal" class="modal" style="display:none;">
   <div class="modal-content">
-    <span class="close" onclick="closeEditModal('projects')">&times;</span>
+    <span class="close" onclick="closeEditModal()">×</span>
     <h3>Edit Project</h3>
     <form id="edit-project-form" method="POST" action="/save-project">
       <!-- Hidden input for projectId -->
@@ -153,6 +152,7 @@
     </form>
   </div>
 </div>
+
 
 
   <div id="github-contributions">

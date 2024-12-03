@@ -141,11 +141,30 @@ function openEditHobbiesModal() {
   modal.style.display = 'block'; // Show the modal
 }
 
-// Open the Hobbies modal
-function openEditProjectModal() {
-  console.log('Opening Projects modal');
+// Function to open the modal with the existing project data
+function openEditProjectModal(projectId) {
+  console.log('Opening Project modal for projectId:', projectId);  // Log the projectId
+
+  const project = portfolioData.projects.find(p => p.projectId === projectId);  // Find the project by its ID
+
+  if (project) {
+    // Populate the form fields with the current project details
+    document.getElementById('project-name').value = project.name;
+    document.getElementById('project-description').value = project.description.join('\n');
+    document.getElementById('project-id').value = projectId;
+
+    // Display the modal
+    const modal = document.getElementById('edit-projects-modal');
+    modal.style.display = 'block';
+  } else {
+    console.error('No project found for projectId:', projectId);
+  }
+}
+
+// Function to close the modal
+function closeEditModal() {
   const modal = document.getElementById('edit-projects-modal');
-  modal.style.display = 'block'; // Show the modal
+  modal.style.display = 'none';
 }
 
 

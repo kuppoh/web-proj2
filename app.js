@@ -276,48 +276,44 @@ app.post('/save-hobbies', async (req, res) => {
 
 
 app.post('/save-project', async (req, res) => {
-  const updatedContent = req.body; // Get the updated content from the form
-  const projectId = updatedContent['project-id']; // Get the project ID from the form
-
-  if (!projectId) {
-    console.error('Project ID is missing');
-    return res.status(400).json({ message: 'Project ID is required' });
-  }
+  const projectId = req.body['project-id'];
+  const projectName = req.body['project-name'];
+  const projectDescription = req.body['project-description'];
 
   try {
-    // Fetch current portfolio data
+    // Step 1: Fetch the current portfolio data from your Space
     const getParams = {
       Bucket: bucketName,
-      Key: 'portfolio-data.json', // Your file key
+      Key: 'portfolio-data.json', // Your file key in the Space
     };
 
     const { Body } = await s3Client.send(new GetObjectCommand(getParams));
-    const data = await streamToString(Body); // Convert stream to string
+    const data = await streamToString(Body); // Convert the stream to a string
     let portfolioData = JSON.parse(data);
 
-    // Find the project by projectId
+    // Step 2: Find the project and update its data
     const project = portfolioData.projects.find(p => p.projectId === projectId);
-    if (!project) {
-      throw new Error(`Project with ID ${projectId} does not exist.`);
+    if (project) {
+      project.name = projectName;
+      project.description = projectDescription.split('\n'); // Assuming descriptions are in an array
+    } else {
+      return res.status(404).send('Project not found');
     }
 
-    // Update the project with the new data
-    project.name = updatedContent['project-name'];
-    project.description = updatedContent['project-description'].split('\n'); // Split description by lines into an array
-
-    // Prepare data to upload
+    // Step 3: Prepare the updated data and upload it to your DigitalOcean Space
     const uploadParams = {
       Bucket: bucketName,
-      Key: 'portfolio-data.json', // File name
-      Body: JSON.stringify(portfolioData, null, 2), // JSON format with indentation
+      Key: 'portfolio-data.json', // The file name to store in your Space
+      Body: JSON.stringify(portfolioData, null, 2), // Updated portfolio data
       ContentType: 'application/json',
-      ACL: 'public-read', // Modify if needed
+      ACL: 'public-read', // Modify as needed (public-read or private)
     };
 
     await s3Client.send(new PutObjectCommand(uploadParams));
 
+    // Step 4: Respond with a success message and redirect to homepage
     console.log('Project saved successfully!');
-    res.redirect('/'); // Redirect after saving (change as needed)
+    res.redirect('/'); // Redirect to the homepage
   } catch (err) {
     console.error('Error saving project data:', err);
     res.status(500).json({ message: 'Error saving data', error: err.message });
