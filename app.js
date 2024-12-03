@@ -11,6 +11,7 @@ const fs = require('fs');
 
 
 const app = express();
+app.use(express.json()); // Middleware to parse JSON bodies
 
 // Serve static files from the 'public' directory
 app.use(express.static(path.join(__dirname, 'public')));
@@ -163,6 +164,8 @@ async function getContent() {
 
 getContent();
 
+
+
 app.get('/', checkAuthenticated, async (req, res) => {
   const isAuthenticated = !!req.user;
   let portfolioData = {};
@@ -187,23 +190,27 @@ app.get('/', checkAuthenticated, async (req, res) => {
   });
 });
 
+// Saving portfolio data
 app.post('/save-portfolio', checkAuthenticated, async (req, res) => {
   const updatedContent = req.body;
 
-  // Load current portfolio data
+  if (!updatedContent) {
+    return res.status(400).json({ message: 'No data provided' });
+  }
+
   let portfolioData = {};
 
   try {
     const portfolioFile = fs.readFileSync('portfolio-data.json', 'utf8');
     portfolioData = JSON.parse(portfolioFile);
 
-    // Update the portfolio data with the new content
-    Object.keys(updatedContent).forEach(key => {
-      if (portfolioData.aboutMe && portfolioData.aboutMe.description) {
-        portfolioData.aboutMe.description[0] = updatedContent.aboutMeDescription1 || portfolioData.aboutMe.description[0];
-        portfolioData.aboutMe.description[1] = updatedContent.aboutMeDescription2 || portfolioData.aboutMe.description[1];
-      }
-    });
+    // Safely update portfolio data
+    if (updatedContent.aboutMeDescription1 && portfolioData.aboutMe) {
+      portfolioData.aboutMe.description[0] = updatedContent.aboutMeDescription1;
+    }
+    if (updatedContent.aboutMeDescription2 && portfolioData.aboutMe) {
+      portfolioData.aboutMe.description[1] = updatedContent.aboutMeDescription2;
+    }
 
     // Save the updated data back to the file
     fs.writeFileSync('portfolio-data.json', JSON.stringify(portfolioData, null, 2));
@@ -212,10 +219,9 @@ app.post('/save-portfolio', checkAuthenticated, async (req, res) => {
     res.json({ message: 'Portfolio saved successfully!' });
   } catch (err) {
     console.error('Error saving portfolio data:', err);
-    res.status(500).send('Error saving data');
+    res.status(500).json({ message: 'Error saving portfolio data' });
   }
 });
-
 
 
 // Start the server
