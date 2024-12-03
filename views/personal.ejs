@@ -134,10 +134,10 @@
             <form id="edit-project-form-<%= project.projectId %>" method="POST" action="/save-project">
               <input type="hidden" name="project-id" id="project-id-<%= project.projectId %>" value="<%= project.projectId %>">
               
-              <label for="project-name-<%= project.projectId %>">Project Title:</label>
+              <label for="project-name">Project Title:</label>
               <input type="text" name="project-name" id="project-name-<%= project.projectId %>" value="<%= project.name %>" required>
               
-              <label for="project-description-<%= project.projectId %>">Project Description:</label>
+              <label for="project-description">Project Description:</label>
               <textarea name="project-description" id="project-description-<%= project.projectId %>" rows="4" required><%= project.description.join('\n') %></textarea>
               
               <button type="submit">Save</button>
@@ -153,22 +153,18 @@
 
   <div id="github-contributions">
     <h2 class="highlight-word">GitHub</h2>
-    <p class="editable-content" contenteditable="false">My current activity and contributions on GitHub.</p>
-    <% if (isAuthenticated) { %>
-      <button class="edit-btn" onclick="toggleEditMode(this)">Edit</button>
-    <% } %>
+    <p>My current activity and contributions on GitHub.</p>
+
     <div id="calendar-component" username="kuppoh" theme-color="#ae2012" background-color="#161a1d"></div>
   </div>
 
   <div id="contacts">
     <h2 class="highlight-word">Contacts</h2>
     <div class="contact-details">
-      <p><span class="highlight-word editable-content" contenteditable="false">Email:</span> keziah@notreal.com</p>
-      <p><span class="highlight-word editable-content" contenteditable="false">Phone:</span> 666-000-6969</p>
+      <p><span class="highlight-word editable-content" >Email:</span> keziah@notreal.com</p>
+      <p><span class="highlight-word editable-content" >Phone:</span> 666-000-6969</p>
     </div>
-    <% if (isAuthenticated) { %>
-      <button class="edit-btn" onclick="toggleEditMode(this)">Edit</button>
-    <% } %>
+
   </div>
   <script>
     var isAuthenticated = <%= JSON.stringify(isAuthenticated) %>;
