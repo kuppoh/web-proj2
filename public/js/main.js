@@ -89,6 +89,8 @@ function toggleEdit(event) {
       .then(response => response.json())
       .then(data => {
         console.log('Saved successfully:', data);
+        // Reload the page after saving
+        location.reload();  // Reload the page to reflect the changes
       })
       .catch(error => {
         console.error('Error saving data:', error);
