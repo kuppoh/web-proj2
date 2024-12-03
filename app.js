@@ -187,6 +187,36 @@ app.get('/', checkAuthenticated, async (req, res) => {
   });
 });
 
+app.post('/save-portfolio', checkAuthenticated, async (req, res) => {
+  const updatedContent = req.body;
+
+  // Load current portfolio data
+  let portfolioData = {};
+
+  try {
+    const portfolioFile = fs.readFileSync('portfolio-data.json', 'utf8');
+    portfolioData = JSON.parse(portfolioFile);
+
+    // Update the portfolio data with the new content
+    Object.keys(updatedContent).forEach(key => {
+      if (portfolioData.aboutMe && portfolioData.aboutMe.description) {
+        portfolioData.aboutMe.description[0] = updatedContent.aboutMeDescription1 || portfolioData.aboutMe.description[0];
+        portfolioData.aboutMe.description[1] = updatedContent.aboutMeDescription2 || portfolioData.aboutMe.description[1];
+      }
+    });
+
+    // Save the updated data back to the file
+    fs.writeFileSync('portfolio-data.json', JSON.stringify(portfolioData, null, 2));
+
+    // Respond with a success message
+    res.json({ message: 'Portfolio saved successfully!' });
+  } catch (err) {
+    console.error('Error saving portfolio data:', err);
+    res.status(500).send('Error saving data');
+  }
+});
+
+
 
 // Start the server
 app.listen(3000, () => {
