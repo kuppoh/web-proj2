@@ -142,10 +142,8 @@ function openEditHobbiesModal() {
 }
 
 function openEditProjectModal(projectId) {
-  const modal = document.getElementById('edit-projects-modal-' + projectId);
-  if (modal) {
-    modal.style.display = 'block';
-  }
+  const modal = document.getElementById(`edit-projects-modal-${projectId}`);
+  modal.style.display = 'block'; // Show the modal
 }
 
 
@@ -166,10 +164,8 @@ function closeEditModal(section) {
 }
 
 function closeProjectEditModal(projectId) {
-  const modal = document.getElementById('edit-projects-modal-' + projectId);
-  if (modal) {
-    modal.style.display = 'none';
-  }
+  const modal = document.getElementById(`edit-projects-modal-${projectId}`);
+  modal.style.display = 'none'; // Hide the modal
 }
 
 
