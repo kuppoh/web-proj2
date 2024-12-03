@@ -150,11 +150,14 @@ async function getContent() {
       // If the response is valid JSON, try to parse it
       const data = JSON.parse(text);
       console.log('Fetched data:', data);
+      return data; // Return the fetched data
     } else {
       console.error('Failed to fetch data. Status:', response.status);
+      return null; // Return null in case of failure
     }
   } catch (err) {
     console.error('Error fetching portfolio data:', err);
+    return null; // Return null in case of error
   }
 }
 
@@ -180,7 +183,7 @@ app.get('/', checkAuthenticated, async (req, res) => {
   res.render('personal', { 
     isAuthenticated, 
     user: req.user ? { displayName: req.user.displayName, emails: req.user.emails } : null,
-    portfolioData
+    portfolioData // Pass portfolio data to EJS
   });
 });
 
