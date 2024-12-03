@@ -89,8 +89,13 @@ function toggleEdit(event) {
       .then(response => response.json())
       .then(data => {
         console.log('Saved successfully:', data);
-        // Reload the page after saving
-        location.reload();  // Reload the page to reflect the changes
+
+        // Close the modal after saving
+        closeEditModal();
+
+        // Optionally reload content on the page (without full reload)
+        updateContentOnPage(updatedContent); // Call function to update content dynamically
+
       })
       .catch(error => {
         console.error('Error saving data:', error);
@@ -109,6 +114,15 @@ function toggleEdit(event) {
   }
 }
 
+// Function to update the content dynamically on the page without full reload
+function updateContentOnPage(updatedContent) {
+  Object.keys(updatedContent).forEach(key => {
+    const element = document.querySelector(`[name="${key}"]`);
+    if (element) {
+      element.textContent = updatedContent[key];
+    }
+  });
+}
 
 // Open the modal
 function openEditModal() {
