@@ -277,6 +277,7 @@ app.post('/save-hobbies', async (req, res) => {
 
 app.post('/save-project', async (req, res) => {
   const updatedContent = req.body; // Get the updated content from the form
+  const projectIndex = updatedContent['project-index']; // Get the project index from the form
 
   try {
     // Step 1: Fetch the current portfolio data from your Space
@@ -289,15 +290,17 @@ app.post('/save-project', async (req, res) => {
     const data = await streamToString(Body); // Convert the stream to a string
     let portfolioData = JSON.parse(data);
 
-    // Step 2: Update the project data with the new content
-    const projectIndex = updatedContent.index; // Assuming you pass the project index to identify the project
+    // Step 2: Ensure that the index exists
     const project = portfolioData.projects[projectIndex];
+    if (!project) {
+      throw new Error(`Project at index ${projectIndex} does not exist.`);
+    }
 
-    // Update project name (title) and description
+    // Step 3: Update the project data with the new content
     project.name = updatedContent['project-name'];
-    project.description = updatedContent['project-description'].split('\n');
+    project.description = updatedContent['project-description'].split('\n'); // Split the description by newlines
 
-    // Step 3: Prepare the updated data and upload it to your DigitalOcean Space
+    // Step 4: Prepare the updated data and upload it to your DigitalOcean Space
     const uploadParams = {
       Bucket: bucketName,
       Key: 'portfolio-data.json', // The file name to store in your Space
@@ -308,7 +311,7 @@ app.post('/save-project', async (req, res) => {
 
     await s3Client.send(new PutObjectCommand(uploadParams));
 
-    // Step 4: Respond with a success message and redirect to homepage
+    // Step 5: Respond with a success message and redirect
     console.log('Project saved successfully!');
     res.redirect('/'); // Redirect to the homepage or wherever you need
   } catch (err) {
@@ -316,6 +319,8 @@ app.post('/save-project', async (req, res) => {
     res.status(500).json({ message: 'Error saving data', error: err.message });
   }
 });
+
+
 
 
 // Helper function to convert the stream to string
