@@ -115,7 +115,7 @@
     <div class="projects-container">
       <% portfolioData.projects.forEach(function(project, index) { %>
         <div>
-          <h4 class="highlight-word editable-content" contenteditable="false"><%= project.title %></h4>
+          <h4 class="highlight-word editable-content" contenteditable="false"><%= project.name %></h4> <!-- Change project.title to project.name -->
           <% if (isAuthenticated) { %>
             <button class="edit-btn" onclick="openEditProjectModal(<%= index %>)">Edit</button>
           <% } %>
@@ -132,18 +132,26 @@
 
 
 
+
 <!-- Modal for editing Projects -->
 <div id="edit-projects-modal" class="modal">
   <div class="modal-content">
     <span class="close" onclick="closeEditModal('projects')">&times;</span>
     <h3>Edit Project</h3>
     <form id="edit-project-form" method="POST" action="/save-project">
+      <!-- Project title input -->
+      <label for="project-name">Project Title:</label>
+      <input type="text" name="project-name" id="project-name" value="<%= portfolioData.projects[0].name %>" required>
+      
+      <!-- Project description input -->
       <label for="project-description">Project Description:</label>
       <textarea name="project-description" id="project-description" rows="4" required><%= portfolioData.projects[0].description.join('\n') %></textarea>
+      
       <button type="submit">Save</button>
     </form>
   </div>
 </div>
+
 
 
   <div id="github-contributions">

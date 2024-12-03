@@ -275,6 +275,47 @@ app.post('/save-hobbies', async (req, res) => {
 });
 
 
+app.post('/save-project', async (req, res) => {
+  const updatedContent = req.body; // Get the updated content from the form
+
+  try {
+    // Step 1: Fetch the current portfolio data from your Space
+    const getParams = {
+      Bucket: bucketName,
+      Key: 'portfolio-data.json', // Your file key in the Space
+    };
+
+    const { Body } = await s3Client.send(new GetObjectCommand(getParams));
+    const data = await streamToString(Body); // Convert the stream to a string
+    let portfolioData = JSON.parse(data);
+
+    // Step 2: Update the project data with the new content
+    const projectIndex = updatedContent.index; // Assuming you pass the project index to identify the project
+    const project = portfolioData.projects[projectIndex];
+
+    // Update project name (title) and description
+    project.name = updatedContent['project-name'];
+    project.description = updatedContent['project-description'].split('\n');
+
+    // Step 3: Prepare the updated data and upload it to your DigitalOcean Space
+    const uploadParams = {
+      Bucket: bucketName,
+      Key: 'portfolio-data.json', // The file name to store in your Space
+      Body: JSON.stringify(portfolioData, null, 2), // Updated portfolio data
+      ContentType: 'application/json',
+      ACL: 'public-read', // Modify as needed (public-read or private)
+    };
+
+    await s3Client.send(new PutObjectCommand(uploadParams));
+
+    // Step 4: Respond with a success message and redirect to homepage
+    console.log('Project saved successfully!');
+    res.redirect('/'); // Redirect to the homepage or wherever you need
+  } catch (err) {
+    console.error('Error saving project data:', err);
+    res.status(500).json({ message: 'Error saving data', error: err.message });
+  }
+});
 
 
 // Helper function to convert the stream to string
