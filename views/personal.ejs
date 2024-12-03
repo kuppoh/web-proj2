@@ -41,9 +41,14 @@
   <% if (user && isAuthenticated) { %>
     <h1>welcome back <%= user.displayName %>!</h1>
   <% } %>
-
+  
   <h2>About Me</h2>
-  <p><%= portfolioData.aboutMe.description %></p>
+  <p>
+    <% portfolioData.aboutMe.description.forEach(function(sentence) { %>
+      <%= sentence %><br>
+    <% }) %>
+  </p>
+  
 
   <div id="hobbies">
     <img src="/images/cam1.png" alt="idk">
