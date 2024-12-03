@@ -161,8 +161,17 @@ function closeEditModal(section) {
   }
 
   modal.style.display = 'none';
+
+  
 }
 
+function closeEditModal() {
+  // Close all modals by hiding them
+  const modals = document.querySelectorAll('.modal');
+  modals.forEach(modal => {
+    modal.style.display = 'none';
+  });
+}
 
 // Close the modal when clicking outside the modal content
 window.onclick = function(event) {
