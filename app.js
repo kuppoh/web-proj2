@@ -191,44 +191,43 @@ app.get('/', checkAuthenticated, async (req, res) => {
   });
 });
 
-app.post('/save-portfolio', checkAuthenticated, async (req, res) => {
+
+const bucketName = 'web-project'; // Replace with your actual bucket name
+
+
+// Route to save portfolio data
+app.post('/save-portfolio', async (req, res) => {
   const updatedContent = req.body; // Get the updated content from the form
 
-  let portfolioData = {};
-
   try {
-    // Read the existing JSON from DigitalOcean Spaces (this assumes you already have the JSON file uploaded)
+    // Step 1: Fetch the current portfolio data from your Space
     const getParams = {
-      Bucket: 'web-project',
-      Key: 'portfolio-data.json', // The key (path) to your file in Spaces
+      Bucket: bucketName,
+      Key: 'portfolio-data.json', // Your file key in the Space
     };
 
-    // Fetch the current portfolio data from Spaces
-    const data = await s3.getObject(getParams).promise();
-    portfolioData = JSON.parse(data.Body.toString('utf-8'));
+    const { Body } = await s3Client.send(new GetObjectCommand(getParams));
+    const data = await streamToString(Body); // Convert the stream to a string
+    let portfolioData = JSON.parse(data);
 
-    // Log the current portfolio data
-    console.log('Current portfolio data:', portfolioData);
-
-    // Update the portfolio data with the new content from the form
+    // Step 2: Update the portfolio data with the new content
     if (portfolioData.aboutMe && portfolioData.aboutMe.description) {
       portfolioData.aboutMe.description[0] = updatedContent.aboutMeDescription1 || portfolioData.aboutMe.description[0];
       portfolioData.aboutMe.description[1] = updatedContent.aboutMeDescription2 || portfolioData.aboutMe.description[1];
     }
 
-    // Prepare the updated portfolio data to upload to Spaces
+    // Step 3: Prepare the updated data and upload it to your DigitalOcean Space
     const uploadParams = {
       Bucket: bucketName,
-      Key: 'portfolio-data.json',
-      Body: JSON.stringify(portfolioData, null, 2),
+      Key: 'portfolio-data.json', // The file name to store in your Space
+      Body: JSON.stringify(portfolioData, null, 2), // Updated portfolio data
       ContentType: 'application/json',
-      ACL: 'public-read' // Make it publicly accessible (or 'private' based on your need)
+      ACL: 'public-read', // Modify as needed (public-read or private)
     };
 
-    // Upload the updated JSON to DigitalOcean Spaces
-    await s3.putObject(uploadParams).promise();
+    await s3Client.send(new PutObjectCommand(uploadParams));
 
-    // Respond with a success message
+    // Step 4: Respond with a success message
     res.json({ message: 'Portfolio saved successfully!' });
   } catch (err) {
     console.error('Error saving portfolio data:', err);
@@ -236,6 +235,15 @@ app.post('/save-portfolio', checkAuthenticated, async (req, res) => {
   }
 });
 
+// Helper function to convert the stream to string
+const streamToString = (stream) => {
+  return new Promise((resolve, reject) => {
+    const chunks = [];
+    stream.on('data', (chunk) => chunks.push(chunk));
+    stream.on('end', () => resolve(Buffer.concat(chunks).toString('utf8')));
+    stream.on('error', reject);
+  });
+};
 
 
 
