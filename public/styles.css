@@ -375,8 +375,12 @@ header h1 {
   max-width: 600px; /* Maximum width for the modal */
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  z-index: 1001;
 }
+
+.modal-content h3 {
+  color: black; /* Or any other color to make it visible */
+}
+
 
 /* The Close Button */
 .close {
