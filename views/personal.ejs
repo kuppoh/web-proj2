@@ -115,12 +115,12 @@
     <div class="projects-container">
       <% portfolioData.projects.forEach(function(project) { %>
         <div>
-          <h4 class="highlight-word editable-content" contenteditable="false"><%= project.name %></h4>
+          <h4 class="highlight-word editable-content" contenteditable="false"><%= projects.name %></h4>
           <% if (isAuthenticated) { %>
-            <button class="edit-btn" onclick="openEditProjectModal('<%= project.projectId %>')">Edit</button>
+            <button class="edit-btn" onclick="openEditProjectModal('<%= projects.projectId %>')">Edit</button>
           <% } %>
           <ul>
-            <% project.description.forEach(function(desc) { %>
+            <% projects.description.forEach(function(desc) { %>
               <li class="editable-content" contenteditable="false"><%= desc %></li>
             <% }); %>
           </ul>
@@ -136,13 +136,13 @@
     <span class="close" onclick="closeEditModal()">×</span>
     <h3>Edit Project</h3>
     <form id="edit-project-form" method="POST" action="/save-project">
-      <input type="hidden" name="project-id" id="project-id" value="<%= project.id %>">
+      <input type="hidden" name="project-id" id="project-id" value="<%= projects.projectId %>">
       
       <label for="project-name">Project Title:</label>
-      <input type="text" name="project-name" id="project-name" value="<%= project.name %>" required>
+      <input type="text" name="project-name" id="project-name" value="<%= projects.name %>" required>
       
       <label for="project-description">Project Description:</label>
-      <textarea name="project-description" id="project-description" rows="4" required><%= project.description.join('\n') %></textarea>
+      <textarea name="project-description" id="project-description" rows="4" required><%= projects.description.join('\n') %></textarea>
       
       <button type="submit">Save</button>
     </form>
