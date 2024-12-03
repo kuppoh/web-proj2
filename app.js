@@ -229,12 +229,14 @@ app.post('/save-portfolio', async (req, res) => {
 
     // Step 4: Respond with a success message
     console.log('Portfolio saved successfully!');
+    res.status(200).json({ message: 'Portfolio saved successfully!' }); // Respond with success message
+
   } catch (err) {
     console.error('Error saving portfolio data:', err);
-    res.status(500).send('Error saving data');
+    res.status(500).json({ message: 'Error saving data', error: err.message }); // Send an error response
   }
-
 });
+
 
 // Helper function to convert the stream to string
 const streamToString = (stream) => {
