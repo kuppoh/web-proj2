@@ -142,8 +142,10 @@ function openEditHobbiesModal() {
 }
 
 function openEditProjectModal(projectId) {
+  console.log('Opening Projects modal');
   const modal = document.getElementById('edit-projects-modal');
-  modal.classList.add('show'); // Show the modal
+  modal.style.display = 'block'
+  document.getElementById("project-id").value = projectId;
 }
 
 

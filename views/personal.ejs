@@ -137,14 +137,10 @@
     <span class="close" onclick="closeEditModal()">×</span>
     <h3>Edit Project</h3>
     <form id="edit-project-form" method="POST" action="/save-project">
-      <!-- Hidden input for projectId -->
       <input type="hidden" name="project-id" id="project-id">
-
-      <!-- Project title input -->
       <label for="project-name">Project Title:</label>
       <input type="text" name="project-name" id="project-name" required>
       
-      <!-- Project description input -->
       <label for="project-description">Project Description:</label>
       <textarea name="project-description" id="project-description" rows="4" required></textarea>
       
@@ -152,7 +148,6 @@
     </form>
   </div>
 </div>
-
 
 
   <div id="github-contributions">
