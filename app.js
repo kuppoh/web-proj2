@@ -11,6 +11,7 @@ const fs = require('fs');
 
 
 const app = express();
+app.use(express.urlencoded({ extended: true })); // For form data
 app.use(express.json()); // Middleware to parse JSON bodies
 
 // Serve static files from the 'public' directory
@@ -190,26 +191,21 @@ app.get('/', checkAuthenticated, async (req, res) => {
   });
 });
 
-// Saving portfolio data
 app.post('/save-portfolio', checkAuthenticated, async (req, res) => {
-  const updatedContent = req.body;
+  const updatedContent = req.body; // This should contain the form data
 
-  if (!updatedContent) {
-    return res.status(400).json({ message: 'No data provided' });
-  }
-
+  // Load current portfolio data
   let portfolioData = {};
 
   try {
+    // Read the existing JSON file
     const portfolioFile = fs.readFileSync('portfolio-data.json', 'utf8');
     portfolioData = JSON.parse(portfolioFile);
 
-    // Safely update portfolio data
-    if (updatedContent.aboutMeDescription1 && portfolioData.aboutMe) {
-      portfolioData.aboutMe.description[0] = updatedContent.aboutMeDescription1;
-    }
-    if (updatedContent.aboutMeDescription2 && portfolioData.aboutMe) {
-      portfolioData.aboutMe.description[1] = updatedContent.aboutMeDescription2;
+    // Update the portfolio data with the new content
+    if (portfolioData.aboutMe && portfolioData.aboutMe.description) {
+      portfolioData.aboutMe.description[0] = updatedContent.aboutMeDescription1 || portfolioData.aboutMe.description[0];
+      portfolioData.aboutMe.description[1] = updatedContent.aboutMeDescription2 || portfolioData.aboutMe.description[1];
     }
 
     // Save the updated data back to the file
@@ -219,9 +215,10 @@ app.post('/save-portfolio', checkAuthenticated, async (req, res) => {
     res.json({ message: 'Portfolio saved successfully!' });
   } catch (err) {
     console.error('Error saving portfolio data:', err);
-    res.status(500).json({ message: 'Error saving portfolio data' });
+    res.status(500).send('Error saving data');
   }
 });
+
 
 
 // Start the server
