@@ -42,23 +42,8 @@
     <h1>welcome back <%= user.displayName %>!</h1>
   <% } %>
 
-  <div id="about-me">
-    <div class="about-me-content">
-      <div class="more-content">
-        <h2 class="highlight-word">About Me</h2>
-        <p class="editable-content" contenteditable="<%= isAuthenticated ? 'false' : 'true' %>">
-          Hey there, my name is <span class="highlight-word">Keziah</span> and here are some stuff about me!
-        </p>
-        <p class="editable-content" contenteditable="<%= isAuthenticated ? 'false' : 'true' %>">
-          I am currently a student at the British Columbia Institute of Technology (BCIT), pursuing a diploma in the Computer Information Technology (CIT) program.
-        </p>
-        <% if (isAuthenticated) { %>
-          <button class="edit-btn" onclick="toggleEditMode(this)">Edit</button>
-        <% } %>
-      </div>
-      <img id="profile-pic" src="/images/just-trying-it-out.png" alt="me">
-    </div>
-  </div>
+  <h2>About Me</h2>
+  <p><%= portfolioData.aboutMe.description %></p>
 
   <div id="hobbies">
     <img src="/images/cam1.png" alt="idk">

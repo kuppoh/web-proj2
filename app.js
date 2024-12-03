@@ -136,62 +136,6 @@ app.get('/login', checkNotAuthenticated, (req, res) => {
   res.render('login', { isAuthenticated: false });
 });
 
-// Use the middleware for the /personal route
-app.get('/', checkAuthenticated, async (req, res) => {
-  const isAuthenticated = !!req.user;
-  let portfolioData = {};
-
-  try {
-    portfolioData = await getContent();
-  } catch (err) {
-    console.error('Error fetching portfolio data:', err);
-  }
-
-  res.render('personal', { 
-    isAuthenticated, 
-    user: req.user ? { displayName: req.user.displayName, emails: req.user.emails } : null,
-    portfolioData
-  });
-});
-
-
-
-// Route for uploading a file
-app.post('/upload', upload.single('file'), async (req, res) => {
-  if (!req.file) {
-    return res.status(400).send('No file uploaded.');
-  }
-
-  // Prepare file for upload to DigitalOcean Spaces
-  const fileContent = fs.readFileSync(req.file.path);  // Read the file from local storage
-
-  // Set the parameters for the S3 upload
-  const params = {
-    Bucket: 'your-space-name',  // Replace with your Space's name
-    Key: req.file.originalname, // The name of the file in Spaces
-    Body: fileContent,
-    ACL: 'public-read'          // You can set it to private or other permissions
-  };
-
-  try {
-    // Upload the file to DigitalOcean Spaces
-    const command = new PutObjectCommand(params);
-    const data = await s3Client.send(command);
-
-    // Remove the file from the local temporary storage
-    fs.unlinkSync(req.file.path);
-
-    // Send response with the file URL from Spaces
-    res.send({
-      message: 'File uploaded successfully',
-      fileUrl: `https://${params.Bucket}.${spacesEndpoint.hostname}/${params.Key}`  // URL to access the uploaded file
-    });
-  } catch (err) {
-    console.log(err);
-    return res.status(500).send('Error uploading file');
-  }
-});
-
 
 const fetch = require('node-fetch');
 
@@ -215,6 +159,20 @@ async function getContent() {
 }
 
 getContent();
+
+// Default route
+app.get('/', checkAuthenticated, async (req, res) => {
+  const isAuthenticated = !!req.user;
+  const portfolioData = await getContent();
+
+  res.render('personal', {
+    isAuthenticated,
+    user: req.user
+      ? { displayName: req.user.displayName, emails: req.user.emails }
+      : null,
+    portfolioData,
+  });
+});
 
 // Start the server
 app.listen(3000, () => {
