@@ -277,11 +277,11 @@ app.post('/save-hobbies', async (req, res) => {
 
 app.post('/save-project', async (req, res) => {
   const updatedContent = req.body; // Get the updated content from the form
-  const projectIndex = updatedContent['project-index']; // Get the project index from the form
+  const projectId = updatedContent['project-id']; // Get the project ID from the form
 
-  if (projectIndex === undefined) {
-    console.error('Project index is undefined');
-    return res.status(400).json({ message: 'Project index is missing' });
+  if (!projectId) {
+    console.error('Project ID is missing');
+    return res.status(400).json({ message: 'Project ID is required' });
   }
 
   try {
@@ -295,13 +295,13 @@ app.post('/save-project', async (req, res) => {
     const data = await streamToString(Body); // Convert stream to string
     let portfolioData = JSON.parse(data);
 
-    // Ensure the project exists
-    const project = portfolioData.projects[projectIndex];
+    // Find the project by projectId
+    const project = portfolioData.projects.find(p => p.projectId === projectId);
     if (!project) {
-      throw new Error(`Project at index ${projectIndex} does not exist.`);
+      throw new Error(`Project with ID ${projectId} does not exist.`);
     }
 
-    // Update project with the new data
+    // Update the project with the new data
     project.name = updatedContent['project-name'];
     project.description = updatedContent['project-description'].split('\n'); // Split description by lines into an array
 
