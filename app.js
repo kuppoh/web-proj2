@@ -192,24 +192,41 @@ app.get('/', checkAuthenticated, async (req, res) => {
 });
 
 app.post('/save-portfolio', checkAuthenticated, async (req, res) => {
-  const updatedContent = req.body; // This should contain the form data
+  const updatedContent = req.body; // Get the updated content from the form
 
-  // Load current portfolio data
   let portfolioData = {};
 
   try {
-    // Read the existing JSON file
-    const portfolioFile = fs.readFileSync('portfolio-data.json', 'utf8');
-    portfolioData = JSON.parse(portfolioFile);
+    // Read the existing JSON from DigitalOcean Spaces (this assumes you already have the JSON file uploaded)
+    const getParams = {
+      Bucket: bucketName,
+      Key: 'portfolio-data.json', // The key (path) to your file in Spaces
+    };
 
-    // Update the portfolio data with the new content
+    // Fetch the current portfolio data from Spaces
+    const data = await s3.getObject(getParams).promise();
+    portfolioData = JSON.parse(data.Body.toString('utf-8'));
+
+    // Log the current portfolio data
+    console.log('Current portfolio data:', portfolioData);
+
+    // Update the portfolio data with the new content from the form
     if (portfolioData.aboutMe && portfolioData.aboutMe.description) {
       portfolioData.aboutMe.description[0] = updatedContent.aboutMeDescription1 || portfolioData.aboutMe.description[0];
       portfolioData.aboutMe.description[1] = updatedContent.aboutMeDescription2 || portfolioData.aboutMe.description[1];
     }
 
-    // Save the updated data back to the file
-    fs.writeFileSync('portfolio-data.json', JSON.stringify(portfolioData, null, 2));
+    // Prepare the updated portfolio data to upload to Spaces
+    const uploadParams = {
+      Bucket: bucketName,
+      Key: 'portfolio-data.json',
+      Body: JSON.stringify(portfolioData, null, 2),
+      ContentType: 'application/json',
+      ACL: 'public-read' // Make it publicly accessible (or 'private' based on your need)
+    };
+
+    // Upload the updated JSON to DigitalOcean Spaces
+    await s3.putObject(uploadParams).promise();
 
     // Respond with a success message
     res.json({ message: 'Portfolio saved successfully!' });
@@ -218,6 +235,7 @@ app.post('/save-portfolio', checkAuthenticated, async (req, res) => {
     res.status(500).send('Error saving data');
   }
 });
+
 
 
 
