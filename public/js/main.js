@@ -127,42 +127,27 @@ function updateContentOnPage(updatedContent) {
   });
 }
 
-// Open the About Me modal with data
+// Open the About Me modal
 function openEditAboutModal() {
   console.log('Opening About Me modal');
-  const modal = document.getElementById('edit-about-modal');
-  const descriptionText = document.getElementById('about-description');
-
-  // Pre-fill the textarea with the current About Me description from the portfolioData
-  descriptionText.value = portfolioData.aboutMe.description.join(' ');
-
-  modal.style.display = 'block';
+  const modal = document.getElementById('edit-modal');
+  modal.style.display = 'block'; // Show the modal
 }
 
-// Open the Hobbies modal with data
+// Open the Hobbies modal
 function openEditHobbiesModal() {
   console.log('Opening Hobbies modal');
   const modal = document.getElementById('edit-hobbies-modal');
-  const hobbiesText = document.getElementById('hobbies-description');
-
-  // Pre-fill the textarea with the current hobbies from portfolioData
-  hobbiesText.value = portfolioData.hobbies.join('\n');
-
-  modal.style.display = 'block';
+  modal.style.display = 'block'; // Show the modal
 }
 
-// Open the Project modal with data (for a specific project)
+// Open the Project modal
 function openEditProjectModal(index) {
   console.log('Opening Project modal for index:', index);
   const modal = document.getElementById('edit-projects-modal');
-  const projectText = document.getElementById('project-description');
-
-  // Get the specific project description
-  const project = portfolioData.projects[index];
-  projectText.value = project.description.join('\n');
-
-  modal.style.display = 'block';
+  modal.style.display = 'block'; // Show the modal
 }
+
 
 // Close the modal based on section type
 function closeEditModal(section) {
