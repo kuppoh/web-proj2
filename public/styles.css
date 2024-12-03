@@ -458,6 +458,20 @@ body.modal-open {
   }
 }
 
+@media (max-width: 768px) {
+  #profile-pic {
+    width: 40vw;
+    height: 40vw;
+    max-width: 300px;
+    max-height: 300px;
+  }
+
+  #hobbies img {
+    max-width: 90%;
+    height: auto;
+  }
+}
+
 /* Ensure dropdown stays open when hovering over dropdown-content */
 .dropdown:hover .dropdown-content,
 .dropdown-content:hover {
