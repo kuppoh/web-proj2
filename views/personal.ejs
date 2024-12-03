@@ -129,7 +129,7 @@
         <!-- Modal for Editing Project -->
         <div id="edit-projects-modal-<%= project.projectId %>" class="modal" style="display:none;">
           <div class="modal-content">
-            <span class="close" onclick="closeEditModal(<%= project.projectId %>)">×</span>
+            <span class="close" onclick="closeProjectEditModal(<%= project.projectId %>)">×</span>
             <h3>Edit Project</h3>
             <form id="edit-project-form-<%= project.projectId %>" method="POST" action="/save-project">
               <input type="hidden" name="project-id" id="project-id-<%= project.projectId %>" value="<%= project.projectId %>">
