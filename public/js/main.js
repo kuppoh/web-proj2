@@ -8,6 +8,44 @@ document.addEventListener('DOMContentLoaded', () => {
   if (typeof isAuthenticated !== 'undefined' && isAuthenticated) {
     onSignIn();
   }
+
+  // Handle modal form submission
+  document.getElementById('edit-about-form')?.addEventListener('submit', async function(e) {
+    e.preventDefault(); // Prevent the default form submission
+
+    const updatedContent = {
+      aboutMeDescription1: document.getElementById('aboutMeDescription1').value,
+      aboutMeDescription2: document.getElementById('aboutMeDescription2').value
+    };
+
+    try {
+      // Send the data via fetch to save it on the server
+      const response = await fetch('/save-portfolio', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',  // Content type for JSON data
+        },
+        body: JSON.stringify(updatedContent),
+      });
+
+      const result = await response.json();  // Parse the response as JSON
+
+      if (response.ok) {
+        // Update the page content dynamically
+        document.querySelector('p[name="aboutMeDescription1"]').textContent = updatedContent.aboutMeDescription1;
+        document.querySelector('p[name="aboutMeDescription2"]').textContent = updatedContent.aboutMeDescription2;
+
+        // Close the modal
+        closeEditModal();
+        alert('Portfolio saved successfully!');
+      } else {
+        alert('Error saving portfolio!');
+      }
+    } catch (error) {
+      console.error('Error submitting form:', error);
+      alert('Error saving portfolio!');
+    }
+  });
 });
 
 function onSignIn() {
@@ -106,7 +144,6 @@ function toggleEdit(event) {
     newItem.focus();
   }
 }
-
 
 // Open the modal
 function openEditModal() {

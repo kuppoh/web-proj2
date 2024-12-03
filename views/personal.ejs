@@ -64,22 +64,26 @@
     </div>
   </div>
   
-  <!-- Modal for editing -->
-  <div id="edit-modal" class="modal">
-    <div class="modal-content">
-      <span class="close" onclick="closeEditModal()">&times;</span>
-      <h3>Edit About Me</h3>
-      <form id="edit-about-form" method="POST" action="/save-portfolio">
-        <label for="aboutMeDescription1">About Me Description 1:</label>
-        <textarea name="aboutMeDescription1" id="aboutMeDescription1" rows="4" required><%= portfolioData.aboutMe.description ? portfolioData.aboutMe.description[0] : '' %></textarea>
-  
-        <label for="aboutMeDescription2">About Me Description 2:</label>
-        <textarea name="aboutMeDescription2" id="aboutMeDescription2" rows="4" required><%= portfolioData.aboutMe.description ? portfolioData.aboutMe.description[1] : '' %></textarea>
-  
-        <button type="submit">Save</button>
-      </form>
-    </div>
+<!-- Modal for editing -->
+<div id="edit-modal" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeEditModal()">&times;</span>
+    <h3>Edit About Me</h3>
+    <form id="edit-about-form" method="POST">
+      <label for="aboutMeDescription1">About Me Description 1:</label>
+      <textarea name="aboutMeDescription1" id="aboutMeDescription1" rows="4" required>
+        <%= portfolioData.aboutMe.description ? portfolioData.aboutMe.description[0] : '' %>
+      </textarea>
+
+      <label for="aboutMeDescription2">About Me Description 2:</label>
+      <textarea name="aboutMeDescription2" id="aboutMeDescription2" rows="4" required>
+        <%= portfolioData.aboutMe.description ? portfolioData.aboutMe.description[1] : '' %>
+      </textarea>
+
+      <button type="submit">Save</button>
+    </form>
   </div>
+</div>
 
   <div id="hobbies">
     <img src="/images/cam1.png" alt="idk">

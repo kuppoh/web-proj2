@@ -206,9 +206,10 @@ app.post('/save-portfolio', async (req, res) => {
       Key: 'portfolio-data.json', // Your file key in the Space
     };
 
+    // Fetch the current portfolio data
     const { Body } = await s3Client.send(new GetObjectCommand(getParams));
     const data = await streamToString(Body); // Convert the stream to a string
-    let portfolioData = JSON.parse(data);
+    let portfolioData = JSON.parse(data); // Parse the existing JSON data
 
     // Step 2: Update the portfolio data with the new content
     if (portfolioData.aboutMe && portfolioData.aboutMe.description) {
@@ -225,15 +226,27 @@ app.post('/save-portfolio', async (req, res) => {
       ACL: 'public-read', // Modify as needed (public-read or private)
     };
 
+    // Upload the updated portfolio data to the Space
     await s3Client.send(new PutObjectCommand(uploadParams));
 
-    // Step 4: Respond with a success message
-    res.json({ message: 'Portfolio saved successfully!' });
+    // Step 4: Respond with a success message and the updated data (no redirect)
+    res.json({
+      success: true,
+      message: 'Portfolio saved successfully!',
+      updatedContent: {
+        aboutMeDescription1: portfolioData.aboutMe.description[0],
+        aboutMeDescription2: portfolioData.aboutMe.description[1],
+      }
+    });
   } catch (err) {
     console.error('Error saving portfolio data:', err);
-    res.status(500).send('Error saving data');
+    res.status(500).json({
+      success: false,
+      message: 'Error saving data',
+    });
   }
 });
+
 
 // Helper function to convert the stream to string
 const streamToString = (stream) => {
