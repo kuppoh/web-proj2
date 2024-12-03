@@ -2,7 +2,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="/styles.css">
-  <script type="module" defer src="https://cdn.jsdelivr.net/gh/imananoosheh/github-contributions-fetch@latest/github_calendar_widget.js"></script>
+  <script type="module" defer
+    src="https://cdn.jsdelivr.net/gh/imananoosheh/github-contributions-fetch@latest/github_calendar_widget.js"></script>
   <title>Personal Portfolio</title>
 </head>
 
@@ -30,9 +31,9 @@
           <a href="#github-contributions">GitHub Contributions</a>
           <% if (isAuthenticated) { %>
             <a href="/logout" id="logout-link">Logout</a>
-          <% } else { %>
-            <a href="/login" id="login-link">Login</a>
-          <% } %>
+            <% } else { %>
+              <a href="/login" id="login-link">Login</a>
+              <% } %>
         </div>
       </li>
     </ul>
@@ -40,15 +41,12 @@
 
   <% if (user && isAuthenticated) { %>
     <h1>welcome back <%= user.displayName %>!</h1>
-  <% } %>
-  
+    <% } %>
+
   <h2>About Me</h2>
   <p>
-    <% portfolioData.aboutMe.description.forEach(function(sentence) { %>
-      <%= sentence %><br>
-    <% }) %>
-  </p>
-  
+    <%= portfolioData.aboutMe.description.join(' ') %></p>
+
 
   <div id="hobbies">
     <img src="/images/cam1.png" alt="idk">
