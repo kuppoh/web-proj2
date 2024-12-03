@@ -145,12 +145,11 @@ async function getContent() {
   try {
     const response = await fetch('https://web-project.sfo3.digitaloceanspaces.com/portfolio-data.json');
     const text = await response.text();  // Read the response body as text first
-    console.log('Fetched Content.')
 
     if (response.ok) {
       // If the response is valid JSON, try to parse it
       const data = JSON.parse(text);
-      console.log('Fetched data:', data);
+      console.log('Fetched data succesfully');
       return data; // Return the fetched data
     } else {
       console.error('Failed to fetch data. Status:', response.status);
