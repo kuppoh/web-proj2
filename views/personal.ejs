@@ -46,19 +46,28 @@
     <div class="about-me-content">
       <div class="more-content">
         <h2 class="highlight-word">About Me</h2>
-        <p class="editable-content" contenteditable="<%= isAuthenticated ? 'false' : 'true' %>">
+        
+
+        <p class="editable-content" contenteditable="<%= isAuthenticated ? 'false' : 'true' %>" name="aboutMeDescription1">
           <%= portfolioData.aboutMe.description ? portfolioData.aboutMe.description[0] : 'Hey there, my name is Keziah and here are some stuff about me!' %>
         </p>
-        <p class="editable-content" contenteditable="<%= isAuthenticated ? 'false' : 'true' %>">
+  
+
+        <p class="editable-content" contenteditable="<%= isAuthenticated ? 'false' : 'true' %>" name="aboutMeDescription2">
           <%= portfolioData.aboutMe.description ? portfolioData.aboutMe.description[1] : 'I am currently a student at the British Columbia Institute of Technology (BCIT), pursuing a diploma in the Computer Information Technology (CIT) program.' %>
         </p>
+  
+
         <% if (isAuthenticated) { %>
-          <button class="edit-btn" onclick="toggleEditMode(this)">Edit</button>
+          <button class="edit-btn" onclick="toggleEdit(this)">Edit</button>
         <% } %>
       </div>
+      
+
       <img id="profile-pic" src="/images/just-trying-it-out.png" alt="me">
     </div>
   </div>
+  
   
 
   <div id="hobbies">

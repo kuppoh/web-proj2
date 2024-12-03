@@ -70,7 +70,29 @@ function toggleEdit(event) {
     button.textContent = 'Edit';
     // Remove delete buttons from list items
     parentDiv.querySelectorAll('.delete-btn').forEach(btn => btn.remove());
-    // Here, you can add code to save the changes to the server (e.g., using AJAX)
+
+    // Save the data to the server via AJAX (fetch)
+    const updatedContent = {};
+    contentElements.forEach(content => {
+      const name = content.getAttribute('name');  // Add a "name" attribute to each editable content block
+      updatedContent[name] = content.textContent;
+    });
+
+    // Send the updated content to the server
+    fetch('/save-portfolio', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(updatedContent)
+    })
+      .then(response => response.json())
+      .then(data => {
+        console.log('Saved successfully:', data);
+      })
+      .catch(error => {
+        console.error('Error saving data:', error);
+      });
   }
 
   // Add a new list item if the parent contains a list and we are in "Save" mode
