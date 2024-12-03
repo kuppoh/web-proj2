@@ -46,12 +46,22 @@
     <div class="about-me-content">
       <div class="more-content">
         <h2 class="highlight-word">About Me</h2>
-        <p class="editable-content" contenteditable="<%= isAuthenticated ? 'false' : 'true' %>">
-          Hey there, my name is <span class="highlight-word">Keziah</span> and here are some stuff about me!
-        </p>
-        <p class="editable-content" contenteditable="<%= isAuthenticated ? 'false' : 'true' %>">
-          I am currently a student at the British Columbia Institute of Technology (BCIT), pursuing a diploma in the Computer Information Technology (CIT) program.
-        </p>
+        
+        <% if (portfolioData && portfolioData.aboutMe && portfolioData.aboutMe.description) { %>
+          <% portfolioData.aboutMe.description.forEach((line) => { %>
+            <p class="editable-content" contenteditable="<%= isAuthenticated ? 'false' : 'true' %>">
+              <%= line %>
+            </p>
+          <% }) %>
+        <% } else { %>
+          <p class="editable-content" contenteditable="<%= isAuthenticated ? 'false' : 'true' %>">
+            Hey there, my name is <span class="highlight-word">Keziah</span> and here are some stuff about me!
+          </p>
+          <p class="editable-content" contenteditable="<%= isAuthenticated ? 'false' : 'true' %>">
+            I am currently a student at the British Columbia Institute of Technology (BCIT), pursuing a diploma in the Computer Information Technology (CIT) program.
+          </p>
+        <% } %>
+  
         <% if (isAuthenticated) { %>
           <button class="edit-btn" onclick="toggleEditMode(this)">Edit</button>
         <% } %>
