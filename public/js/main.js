@@ -105,6 +105,10 @@ function toggleEdit(event) {
       });
   }
 
+  
+}
+
+
   // Add a new list item if the parent contains a list and we are in "Save" mode
   const ul = parentDiv.querySelector('ul');
   if (ul && button.textContent === 'Save') {
