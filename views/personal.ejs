@@ -115,10 +115,9 @@
     <div class="projects-container">
       <% portfolioData.projects.forEach(function(project) { %>
         <div>
-
           <h4 class="highlight-word editable-content" contenteditable="false"><%= project.name %></h4>
           <% if (isAuthenticated) { %>
-            <button class="edit-btn" onclick="openEditProjectModal('<%= project.projectId %>')">Edit</button>
+            <button class="edit-btn" onclick="openEditProjectModal(<%= project.projectId %>)">Edit</button>
           <% } %>
           <ul>
             <% project.description.forEach(function(desc) { %>
@@ -126,31 +125,29 @@
             <% }); %>
           </ul>
         </div>
+
+        <!-- Modal for Editing Project -->
+        <div id="edit-projects-modal-<%= project.projectId %>" class="modal" style="display:none;">
+          <div class="modal-content">
+            <span class="close" onclick="closeEditModal(<%= project.projectId %>)">×</span>
+            <h3>Edit Project</h3>
+            <form id="edit-project-form-<%= project.projectId %>" method="POST" action="/save-project">
+              <input type="hidden" name="project-id" id="project-id-<%= project.projectId %>" value="<%= project.projectId %>">
+              
+              <label for="project-name-<%= project.projectId %>">Project Title:</label>
+              <input type="text" name="project-name" id="project-name-<%= project.projectId %>" value="<%= project.name %>" required>
+              
+              <label for="project-description-<%= project.projectId %>">Project Description:</label>
+              <textarea name="project-description" id="project-description-<%= project.projectId %>" rows="4" required><%= project.description.join('\n') %></textarea>
+              
+              <button type="submit">Save</button>
+            </form>
+          </div>
+        </div>
       <% }); %>
     </div>
   </div>
 </div>
-
-<!-- Modal for Editing Project -->
-<div id="edit-projects-modal" class="modal" style="display:none;">
-  <div class="modal-content">
-    <span class="close" onclick="closeEditModal()">×</span>
-    <h3>Edit Project</h3>
-    <form id="edit-project-form" method="POST" action="/save-project">
-      <!-- Access the specific projectId here -->
-      <input type="hidden" name="project-id" id="project-id" value="<%= project.projectId %>">
-      
-      <label for="project-name">Project Title:</label>
-      <input type="text" name="project-name" id="project-name" value="<%= project.name %>" required>
-      
-      <label for="project-description">Project Description:</label>
-      <textarea name="project-description" id="project-description" rows="4" required><%= project.description.join('\n') %></textarea>
-      
-      <button type="submit">Save</button>
-    </form>
-  </div>
-</div>
-
 
 
 
