@@ -45,7 +45,12 @@
 
   <h2>About Me</h2>
   <p>
-    <%= portfolioData.aboutMe.description.join(' ') %></p>
+    <% if (portfolioData?.aboutMe?.description) { %>
+      <%= portfolioData.aboutMe.description.join(' ') %>
+    <% } else { %>
+      No information available.
+    <% } %>
+  </p>
 
 
   <div id="hobbies">

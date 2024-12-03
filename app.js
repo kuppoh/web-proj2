@@ -160,19 +160,30 @@ async function getContent() {
 
 getContent();
 
-// Default route
 app.get('/', checkAuthenticated, async (req, res) => {
   const isAuthenticated = !!req.user;
-  const portfolioData = await getContent();
+  let portfolioData = {};
 
-  res.render('personal', {
-    isAuthenticated,
-    user: req.user
-      ? { displayName: req.user.displayName, emails: req.user.emails }
-      : null,
-    portfolioData,
+  try {
+    portfolioData = await getContent();
+    if (!portfolioData) {
+      console.error('Portfolio data could not be loaded.');
+      portfolioData = {}; // Fallback to an empty object
+    }
+  } catch (err) {
+    console.error('Error fetching portfolio data:', err);
+    portfolioData = {}; // Fallback to an empty object
+  }
+
+  console.log('Portfolio data being sent to EJS:', portfolioData);
+
+  res.render('personal', { 
+    isAuthenticated, 
+    user: req.user ? { displayName: req.user.displayName, emails: req.user.emails } : null,
+    portfolioData
   });
 });
+
 
 // Start the server
 app.listen(3000, () => {
