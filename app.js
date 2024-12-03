@@ -57,7 +57,7 @@ passport.deserializeUser((obj, done) => {
   done(null, obj);
 });
 
-const { S3Client, PutObjectCommand } = require('@aws-sdk/client-s3');
+const { S3Client, GetObjectCommand, PutObjectCommand } = require('@aws-sdk/client-s3');
 const { Endpoint } = require('@aws-sdk/types');
 
 
