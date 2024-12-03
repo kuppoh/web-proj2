@@ -129,6 +129,7 @@ function updateContentOnPage(updatedContent) {
 
 // Open the About Me modal with data
 function openEditAboutModal() {
+  console.log('Opening About Me modal');
   const modal = document.getElementById('edit-about-modal');
   const descriptionText = document.getElementById('about-description');
 
@@ -140,6 +141,7 @@ function openEditAboutModal() {
 
 // Open the Hobbies modal with data
 function openEditHobbiesModal() {
+  console.log('Opening Hobbies modal');
   const modal = document.getElementById('edit-hobbies-modal');
   const hobbiesText = document.getElementById('hobbies-description');
 
@@ -151,6 +153,7 @@ function openEditHobbiesModal() {
 
 // Open the Project modal with data (for a specific project)
 function openEditProjectModal(index) {
+  console.log('Opening Project modal for index:', index);
   const modal = document.getElementById('edit-projects-modal');
   const projectText = document.getElementById('project-description');
 
@@ -175,14 +178,12 @@ function closeEditModal(section) {
   modal.style.display = 'none';
 }
 
-
 function closeEditModal() {
   const modals = document.querySelectorAll('.modal');
   modals.forEach(modal => {
     modal.style.display = 'none';
   });
 }
-
 
 // Close the modal when clicking outside the modal content
 window.onclick = function(event) {
