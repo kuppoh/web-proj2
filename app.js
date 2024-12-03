@@ -279,41 +279,45 @@ app.post('/save-project', async (req, res) => {
   const updatedContent = req.body; // Get the updated content from the form
   const projectIndex = updatedContent['project-index']; // Get the project index from the form
 
+  if (projectIndex === undefined) {
+    console.error('Project index is undefined');
+    return res.status(400).json({ message: 'Project index is missing' });
+  }
+
   try {
-    // Step 1: Fetch the current portfolio data from your Space
+    // Fetch current portfolio data
     const getParams = {
       Bucket: bucketName,
-      Key: 'portfolio-data.json', // Your file key in the Space
+      Key: 'portfolio-data.json', // Your file key
     };
 
     const { Body } = await s3Client.send(new GetObjectCommand(getParams));
-    const data = await streamToString(Body); // Convert the stream to a string
+    const data = await streamToString(Body); // Convert stream to string
     let portfolioData = JSON.parse(data);
 
-    // Step 2: Ensure that the index exists
+    // Ensure the project exists
     const project = portfolioData.projects[projectIndex];
     if (!project) {
       throw new Error(`Project at index ${projectIndex} does not exist.`);
     }
 
-    // Step 3: Update the project data with the new content
+    // Update project with the new data
     project.name = updatedContent['project-name'];
-    project.description = updatedContent['project-description'].split('\n'); // Split the description by newlines
+    project.description = updatedContent['project-description'].split('\n'); // Split description by lines into an array
 
-    // Step 4: Prepare the updated data and upload it to your DigitalOcean Space
+    // Prepare data to upload
     const uploadParams = {
       Bucket: bucketName,
-      Key: 'portfolio-data.json', // The file name to store in your Space
-      Body: JSON.stringify(portfolioData, null, 2), // Updated portfolio data
+      Key: 'portfolio-data.json', // File name
+      Body: JSON.stringify(portfolioData, null, 2), // JSON format with indentation
       ContentType: 'application/json',
-      ACL: 'public-read', // Modify as needed (public-read or private)
+      ACL: 'public-read', // Modify if needed
     };
 
     await s3Client.send(new PutObjectCommand(uploadParams));
 
-    // Step 5: Respond with a success message and redirect
     console.log('Project saved successfully!');
-    res.redirect('/'); // Redirect to the homepage or wherever you need
+    res.redirect('/'); // Redirect after saving (change as needed)
   } catch (err) {
     console.error('Error saving project data:', err);
     res.status(500).json({ message: 'Error saving data', error: err.message });

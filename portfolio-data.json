@@ -15,6 +15,7 @@
   ],
   "projects": [
     {
+      "projectId": "1",
       "name": "VetVault (Pet Tracker)",
       "description": [
         "A mini-project to track your furry friends or animals.",
@@ -24,6 +25,7 @@
       ]
     },
     {
+      "projectId": "2",
       "name": "RemindlyProject",
       "description": [
         "A reminder web application, where you can add, delete, and edit reminders.",
@@ -31,6 +33,7 @@
       ]
     },
     {
+      "projectId": "3",
       "name": "Subscription System",
       "description": [
         "Currently a work in progress.",

@@ -141,11 +141,28 @@ function openEditHobbiesModal() {
   modal.style.display = 'block'; // Show the modal
 }
 
-// Open the Project modal
 function openEditProjectModal(index) {
   console.log('Opening Project modal for index:', index);
-  const modal = document.getElementById('edit-projects-modal');
-  modal.style.display = 'block'; // Show the modal
+
+  // Fetch the project data based on the index
+  const project = portfolioData.projects[index];
+
+  if (project) {
+    // Fill in the project data into the modal fields
+    document.getElementById('project-name').value = project.name;
+
+    // Join the descriptions into a single string (if multiple lines exist)
+    document.getElementById('project-description').value = project.description.join('\n'); // Handle multiple description lines
+
+    // Set the hidden field with the index of the project
+    document.getElementById('project-index').value = index;
+
+    // Show the modal
+    const modal = document.getElementById('edit-projects-modal');
+    modal.style.display = 'block';
+  } else {
+    console.error('No project found for index:', index);
+  }
 }
 
 
