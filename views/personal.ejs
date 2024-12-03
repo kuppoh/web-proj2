@@ -47,28 +47,39 @@
       <div class="more-content">
         <h2 class="highlight-word">About Me</h2>
         
-
-        <p class="editable-content" contenteditable="<%= isAuthenticated ? 'false' : 'true' %>" name="aboutMeDescription1">
+        <p class="editable-content" name="aboutMeDescription1">
           <%= portfolioData.aboutMe.description ? portfolioData.aboutMe.description[0] : 'Hey there, my name is Keziah and here are some stuff about me!' %>
         </p>
-  
-
-        <p class="editable-content" contenteditable="<%= isAuthenticated ? 'false' : 'true' %>" name="aboutMeDescription2">
+        
+        <p class="editable-content" name="aboutMeDescription2">
           <%= portfolioData.aboutMe.description ? portfolioData.aboutMe.description[1] : 'I am currently a student at the British Columbia Institute of Technology (BCIT), pursuing a diploma in the Computer Information Technology (CIT) program.' %>
         </p>
   
-
         <% if (isAuthenticated) { %>
-          <button class="edit-btn" onclick="toggleEdit(this)">Edit</button>
+          <button class="edit-btn" onclick="openEditModal()">Edit</button>
         <% } %>
       </div>
-      
-
+  
       <img id="profile-pic" src="/images/just-trying-it-out.png" alt="me">
     </div>
   </div>
   
+  <!-- Modal for editing -->
+  <div id="edit-modal" class="modal">
+    <div class="modal-content">
+      <span class="close" onclick="closeEditModal()">&times;</span>
+      <h3>Edit About Me</h3>
+      <form id="edit-about-form" method="POST" action="/save-portfolio">
+        <label for="aboutMeDescription1">About Me Description 1:</label>
+        <textarea name="aboutMeDescription1" id="aboutMeDescription1" rows="4" required><%= portfolioData.aboutMe.description ? portfolioData.aboutMe.description[0] : '' %></textarea>
   
+        <label for="aboutMeDescription2">About Me Description 2:</label>
+        <textarea name="aboutMeDescription2" id="aboutMeDescription2" rows="4" required><%= portfolioData.aboutMe.description ? portfolioData.aboutMe.description[1] : '' %></textarea>
+  
+        <button type="submit">Save</button>
+      </form>
+    </div>
+  </div>
 
   <div id="hobbies">
     <img src="/images/cam1.png" alt="idk">

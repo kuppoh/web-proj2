@@ -106,3 +106,21 @@ function toggleEdit(event) {
     newItem.focus();
   }
 }
+
+
+// Open the modal
+function openEditModal() {
+  document.getElementById('edit-modal').style.display = "block";
+}
+
+// Close the modal
+function closeEditModal() {
+  document.getElementById('edit-modal').style.display = "none";
+}
+
+// Close the modal when clicking outside the modal content
+window.onclick = function(event) {
+  if (event.target == document.getElementById('edit-modal')) {
+    closeEditModal();
+  }
+}
