@@ -199,7 +199,7 @@ app.post('/save-portfolio', checkAuthenticated, async (req, res) => {
   try {
     // Read the existing JSON from DigitalOcean Spaces (this assumes you already have the JSON file uploaded)
     const getParams = {
-      Bucket: bucketName,
+      Bucket: 'web-project',
       Key: 'portfolio-data.json', // The key (path) to your file in Spaces
     };
 
