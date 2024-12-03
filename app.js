@@ -145,8 +145,7 @@ async function getContent() {
   try {
     const response = await fetch('https://web-project.sfo3.digitaloceanspaces.com/portfolio-data.json');
     const text = await response.text();  // Read the response body as text first
-    console.log('Response Status:', response.status);
-    console.log('Response Body:', text); // Log the response body
+    console.log('Fetched Content.')
 
     if (response.ok) {
       // If the response is valid JSON, try to parse it
@@ -181,8 +180,6 @@ app.get('/', checkAuthenticated, async (req, res) => {
     console.error('Error fetching portfolio data:', err);
     portfolioData = {}; // Fallback to an empty object
   }
-
-  console.log('Portfolio data being sent to EJS:', portfolioData);
 
   res.render('personal', { 
     isAuthenticated, 
