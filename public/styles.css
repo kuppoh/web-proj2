@@ -169,12 +169,14 @@ body>div {
 }
 
 #hobbies img {
-  max-width: 100%; /* Ensures image doesn't overflow the container */
-  height: auto; /* Allows height to adjust according to the aspect ratio */
-  object-fit: contain; /* Ensures the entire image fits inside its container */
-  display: block; /* Ensures it behaves like a block element */
+  width: 100%;
+  max-width: 400px; /* Maximum width */
+  height: auto; /* Maintain aspect ratio */
+  object-fit: contain; /* Ensures image fits within its container */
+  display: block;
   margin: 0 auto; /* Centers the image horizontally */
 }
+
 
 
 
