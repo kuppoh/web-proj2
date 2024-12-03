@@ -84,81 +84,70 @@
 
 
   <div id="hobbies">
-    <div class="hobbies-content">
-      <div class="more-content">
-        <h2 class="highlight-word">Some Hobbies I love:</h2>
-        
-        <ul>
-          <% portfolioData.hobbies.forEach(function(hobby, index) { %>
-            <li class="editable-content" name="hobby<%= index %>">
-              <%= hobby %>
-            </li>
-          <% }); %>
-        </ul>
-  
-        <% if (isAuthenticated) { %>
-          <button class="edit-btn" onclick="openEditHobbiesModal()">Edit</button>
-        <% } %>
-      </div>
+    <img src="/images/cam1.png" alt="idk">
+    <div style="margin-left: 5%;" class="more-content">
+      <h2 class="highlight-word editable-content" contenteditable="false">Some Hobbies I love:</h2>
+      <% if (isAuthenticated) { %>
+        <button class="edit-btn" onclick="openEditHobbiesModal()">Edit</button>
+      <% } %>
+      <ul>
+        <% portfolioData.hobbies.forEach(function(hobby) { %>
+          <li class="editable-content" contenteditable="false"><%= hobby %></li>
+        <% }); %>
+      </ul>
     </div>
   </div>
   
+
 <!-- Modal for editing Hobbies -->
 <div id="edit-hobbies-modal" class="modal">
   <div class="modal-content">
-    <span class="close" onclick="closeEditModal()">&times;</span>
+    <span class="close" onclick="closeEditModal('hobbies')">&times;</span>
     <h3>Edit Hobbies</h3>
     <form id="edit-hobbies-form" method="POST" action="/save-hobbies">
-      <label for="hobbiesDescription">Hobbies:</label>
-      <textarea name="hobbiesDescription" id="hobbiesDescription" rows="4" required>
-        <%= portfolioData.hobbies ? portfolioData.hobbies.join('\n') : '' %>
-      </textarea>
-
+      <label for="hobbies-description">Hobbies:</label>
+      <textarea name="hobbies-description" id="hobbies-description" rows="4" required><%= portfolioData.hobbies.join('\n') %></textarea>
       <button type="submit">Save</button>
     </form>
   </div>
 </div>
 
-  
 
 <div id="projects">
-  <h2 class="highlight-word">Projects</h2>
-  <div class="projects-container">
-    <% portfolioData.projects.forEach(function(project, index) { %>
-      <div class="project-item">
-        <h4 class="highlight-word"><%= project.name %></h4>
-        <ul>
-          <% project.description.forEach(function(desc) { %>
-            <li><%= desc %></li>
-          <% }); %>
-        </ul>
-        
-        <% if (isAuthenticated) { %>
-          <button class="edit-btn" onclick="openEditProjectModal(<%= index %>)">Edit</button>
-        <% } %>
-      </div>
-    <% }); %>
+  <div>
+    <h2 class="highlight-word">Projects</h2>
+    <div class="projects-container">
+      <% portfolioData.projects.forEach(function(project, index) { %>
+        <div>
+          <h4 class="highlight-word editable-content" contenteditable="false"><%= project.title %></h4>
+          <% if (isAuthenticated) { %>
+            <button class="edit-btn" onclick="openEditProjectModal(<%= index %>)">Edit</button>
+          <% } %>
+          <ul>
+            <% project.description.forEach(function(desc) { %>
+              <li class="editable-content" contenteditable="false"><%= desc %></li>
+            <% }); %>
+          </ul>
+        </div>
+      <% }); %>
+    </div>
   </div>
 </div>
+
 
 
 <!-- Modal for editing Projects -->
 <div id="edit-projects-modal" class="modal">
   <div class="modal-content">
-    <span class="close" onclick="closeEditModal()">&times;</span>
+    <span class="close" onclick="closeEditModal('projects')">&times;</span>
     <h3>Edit Project</h3>
     <form id="edit-project-form" method="POST" action="/save-project">
-      <label for="projectName">Project Name:</label>
-      <input type="text" name="projectName" id="projectName" required>
-      
-      <label for="projectDescription">Project Description:</label>
-      <textarea name="projectDescription" id="projectDescription" rows="4" required></textarea>
-
+      <label for="project-description">Project Description:</label>
+      <textarea name="project-description" id="project-description" rows="4" required><%= portfolioData.projects[0].description.join('\n') %></textarea>
       <button type="submit">Save</button>
     </form>
   </div>
 </div>
-
 
 
   <div id="github-contributions">
