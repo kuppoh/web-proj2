@@ -117,7 +117,7 @@
         <div>
           <h4 class="highlight-word editable-content" contenteditable="false"><%= project.name %></h4>
           <% if (isAuthenticated) { %>
-            <button class="edit-btn" onclick="openEditProjectModal('<%= project.projectId %>')">Edit</button>
+            <button class="edit-btn" onclick="openEditProjectModal()">Edit</button>
           <% } %>
           <ul>
             <% project.description.forEach(function(desc) { %>
