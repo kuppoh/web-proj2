@@ -115,12 +115,13 @@
     <div class="projects-container">
       <% portfolioData.projects.forEach(function(project) { %>
         <div>
-          <h4 class="highlight-word editable-content" contenteditable="false"><%= name %></h4>
+
+          <h4 class="highlight-word editable-content" contenteditable="false"><%= project.name %></h4>
           <% if (isAuthenticated) { %>
-            <button class="edit-btn" onclick="openEditProjectModal('<%= projectId %>')">Edit</button>
+            <button class="edit-btn" onclick="openEditProjectModal('<%= project.projectId %>')">Edit</button>
           <% } %>
           <ul>
-            <% description.forEach(function(desc) { %>
+            <% project.description.forEach(function(desc) { %>
               <li class="editable-content" contenteditable="false"><%= desc %></li>
             <% }); %>
           </ul>
