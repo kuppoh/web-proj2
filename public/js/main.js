@@ -127,15 +127,62 @@ function updateContentOnPage(updatedContent) {
   });
 }
 
-// Open the modal
-function openEditModal() {
-  document.getElementById('edit-modal').style.display = "block";
+// Open the About Me modal with data
+function openEditAboutModal() {
+  const modal = document.getElementById('edit-about-modal');
+  const descriptionText = document.getElementById('about-description');
+
+  // Pre-fill the textarea with the current About Me description from the portfolioData
+  descriptionText.value = portfolioData.aboutMe.description.join(' ');
+
+  modal.style.display = 'block';
 }
 
-// Close the modal
-function closeEditModal() {
-  document.getElementById('edit-modal').style.display = "none";
+// Open the Hobbies modal with data
+function openEditHobbiesModal() {
+  const modal = document.getElementById('edit-hobbies-modal');
+  const hobbiesText = document.getElementById('hobbies-description');
+
+  // Pre-fill the textarea with the current hobbies from portfolioData
+  hobbiesText.value = portfolioData.hobbies.join('\n');
+
+  modal.style.display = 'block';
 }
+
+// Open the Project modal with data (for a specific project)
+function openEditProjectModal(index) {
+  const modal = document.getElementById('edit-projects-modal');
+  const projectText = document.getElementById('project-description');
+
+  // Get the specific project description
+  const project = portfolioData.projects[index];
+  projectText.value = project.description.join('\n');
+
+  modal.style.display = 'block';
+}
+
+// Close the modal based on section type
+function closeEditModal(section) {
+  let modal;
+  if (section === 'about') {
+    modal = document.getElementById('edit-about-modal');
+  } else if (section === 'hobbies') {
+    modal = document.getElementById('edit-hobbies-modal');
+  } else if (section === 'projects') {
+    modal = document.getElementById('edit-projects-modal');
+  }
+
+  modal.style.display = 'none';
+}
+
+
+function closeEditModal() {
+  const modals = document.querySelectorAll('.modal');
+  modals.forEach(modal => {
+    modal.style.display = 'none';
+  });
+}
+
 
 // Close the modal when clicking outside the modal content
 window.onclick = function(event) {
