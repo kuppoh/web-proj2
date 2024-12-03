@@ -78,6 +78,9 @@ function toggleEdit(event) {
       updatedContent[name] = content.textContent;
     });
 
+    // Prevent the default form submission that would cause a page reload
+    event.preventDefault();
+
     // Send the updated content to the server
     fetch('/save-portfolio', {
       method: 'POST',
@@ -86,19 +89,19 @@ function toggleEdit(event) {
       },
       body: JSON.stringify(updatedContent)
     })
-      .then(response => response.json())
+      .then(response => response.json())  // Expect JSON response from the server
       .then(data => {
-        console.log('Saved successfully:', data);
+        console.log('Saved successfully:', data.message);
 
         // Close the modal after saving
         closeEditModal();
 
-        // Optionally reload content on the page (without full reload)
-        updateContentOnPage(updatedContent); // Call function to update content dynamically
-
+        // Optionally update content on the page dynamically
+        updateContentOnPage(updatedContent);  // Call function to update content dynamically
       })
       .catch(error => {
         console.error('Error saving data:', error);
+        alert('Error saving data! Please try again.');
       });
   }
 
