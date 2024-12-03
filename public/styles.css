@@ -168,15 +168,14 @@ body>div {
   margin: 15px;
 }
 
-#hobbies>img {
-  max-width: 30%; /* Adjust the width as needed */
-  height: auto;
-  object-fit: cover; /* Crop the image to fit the container */
-  /* border-style: solid;
+#hobbies > img {
+  max-width: 100%; /* Ensure image never exceeds the container width */
+  height: auto; /* Let the height adjust proportionally */
+  object-fit: cover; /* Ensure it covers the area without stretching */
+  border-style: solid;
   border-color: #f1f1f1;
   border-width: 5px;
-  box-shadow: 0 0 0 5px #ae2012; */
-
+  box-shadow: 0 0 0 5px #ae2012;
   margin-left: 9%;
 }
 
