@@ -166,6 +166,21 @@ getContent();
 
 
 app.get('/', checkAuthenticated, async (req, res) => {
+  // Log user access
+  if (req.user) {
+    const userEmail = req.user.emails ? req.user.emails[0].value : 'No email';
+    const userName = req.user.displayName || 'Unknown User';
+    const currentTime = new Date().toISOString(); // Get the current time
+
+    // Log when user accesses the '/' route
+    console.log(`[${currentTime}] User: ${userName} (${userEmail}) accessed the homepage`);
+
+    // Optionally, log the request path
+    console.log(`[${currentTime}] Request Path: ${req.originalUrl}`);
+  } else {
+    console.log('[No user logged in] An unauthenticated user accessed the homepage');
+  }
+
   const isAuthenticated = !!req.user;
   let portfolioData = {};
 
@@ -186,6 +201,7 @@ app.get('/', checkAuthenticated, async (req, res) => {
     portfolioData // Pass portfolio data to EJS
   });
 });
+
 
 
 const bucketName = 'web-project'; // Replace with your actual bucket name
