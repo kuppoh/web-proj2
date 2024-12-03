@@ -136,18 +136,19 @@
     <span class="close" onclick="closeEditModal()">×</span>
     <h3>Edit Project</h3>
     <form id="edit-project-form" method="POST" action="/save-project">
-      <input type="hidden" name="project-id" id="project-id">
+      <input type="hidden" name="project-id" id="project-id" value="<%= project.id %>">
       
       <label for="project-name">Project Title:</label>
-      <input type="text" name="project-name" id="project-name" required>
+      <input type="text" name="project-name" id="project-name" value="<%= project.name %>" required>
       
       <label for="project-description">Project Description:</label>
-      <textarea name="project-description" id="project-description" rows="4" required></textarea>
+      <textarea name="project-description" id="project-description" rows="4" required><%= project.description.join('\n') %></textarea>
       
       <button type="submit">Save</button>
     </form>
   </div>
 </div>
+
 
 
 
