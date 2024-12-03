@@ -264,14 +264,13 @@ header h1 {
   justify-content: center;
   align-items: center;
   height: 100vh; /* Ensure it takes the full viewport height */
-  width: 50vh;
   color: black;
 
 }
 
 .sign-in-form {
   background-color: white;
-
+  width: 100%; 
   padding: 25px;
   border-radius: 10px;
 
