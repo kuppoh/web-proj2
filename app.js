@@ -195,7 +195,6 @@ app.get('/', checkAuthenticated, async (req, res) => {
 const bucketName = 'web-project'; // Replace with your actual bucket name
 
 
-// Route to save portfolio data
 app.post('/save-portfolio', async (req, res) => {
   const updatedContent = req.body; // Get the updated content from the form
 
@@ -227,15 +226,15 @@ app.post('/save-portfolio', async (req, res) => {
 
     await s3Client.send(new PutObjectCommand(uploadParams));
 
-    // Step 4: Respond with a success message
+    // Step 4: Respond with a success message and redirect to homepage
     console.log('Portfolio saved successfully!');
-    res.status(200).json({ message: 'Portfolio saved successfully!' }); // Respond with success message
-
+    res.redirect('/'); // Redirect to the homepage
   } catch (err) {
     console.error('Error saving portfolio data:', err);
-    res.status(500).json({ message: 'Error saving data', error: err.message }); // Send an error response
+    res.status(500).json({ message: 'Error saving data', error: err.message });
   }
 });
+
 
 
 // Helper function to convert the stream to string
